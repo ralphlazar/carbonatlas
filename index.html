@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carbon Atlas - Carbon Pricing Intelligence</title>
+<meta name="description" content="Carbon pricing schemes mapped and explained. Every jurisdiction. Every compliance deadline. Every scheme.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #fafaf8; --bg3: #f5f5f2;
+    --border: #e8e8e5;
+    --blue: #1a3a5c; --blue-pale: #e0eaf5;
+    --blue-mid: #2a5c8a;
+    --teal: #1a5c5c; --teal-pale: #e0f0ef;
+    --text: #1a1a18; --text-muted: #5f5e5a; --text-dim: #999896;
+    --ets-bg: #e0eaf5;  --ets-text: #1a3a5c;
+    --tax-bg: #faeeda;  --tax-text: #633806;
+    --both-bg: #e0f0ef; --both-text: #0c5c58;
+    --map-ets: #1a3a5c; --map-tax: #b06a00; --map-both: #1a5c58;
+    --map-partial: #4a7fb5; --map-none: #d8d6d0;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .logo-mark { width: 30px; height: 30px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+  .logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .logo-sub  { font-size: 11px; color: var(--text-muted); font-weight: 400; display: block; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-cta { font-size: 12px; padding: 7px 16px; border-radius: 8px; border: 1px solid var(--blue); color: var(--blue); background: transparent; cursor: pointer; font-weight: 500; transition: background 0.15s; }
+  .nav-cta:hover { background: var(--blue-pale); }
+  .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.2s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 0 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .mobile-menu.open { display: block; }
+  .mobile-menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 24px; font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; transition: background 0.1s; }
+  .mobile-menu-item:hover { background: var(--bg2); }
+  .mobile-menu-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .mobile-menu-divider { height: 1px; background: var(--border); margin: 8px 24px; }
+
+  /* HOME */
+  .home-hero { padding: 20px 40px 12px; max-width: 1100px; margin: 0 auto; }
+  .hero-h { font-size: 36px; font-weight: 600; line-height: 1.12; letter-spacing: -0.025em; color: var(--text); }
+  .hero-sub { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+  .home-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; max-width: 1100px; margin: 0 auto; padding: 0 24px 40px; }
+  @media (min-width: 769px) {
+    .home-grid { grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: 0 40px 40px; }
+  }
+  @media (max-width: 768px) {
+    .home-grid { grid-template-columns: 1fr !important; padding: 0 16px 32px !important; }
+  }
+
+  /* CARDS */
+  .home-card { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; min-width: 0; }
+  .home-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .home-card-1 { border-color: rgba(26,58,92,0.25);  background: rgba(26,58,92,0.025);  height: 340px; overflow: hidden; cursor: default; }
+  .home-card-2 { border-color: rgba(42,92,138,0.25); background: rgba(42,92,138,0.025); height: 340px; overflow: hidden; }
+  .home-card-3 { border-color: rgba(26,92,138,0.25); background: rgba(26,92,138,0.025); height: 340px; overflow: hidden; cursor: default; }
+  .home-card-4 { border-color: rgba(26,92,92,0.25);  background: rgba(26,92,92,0.025);  height: 340px; overflow: hidden; cursor: default; }
+  .home-card-1:hover { border-color: rgba(26,58,92,0.5); }
+  .home-card-2:hover { border-color: rgba(42,92,138,0.5); }
+  .home-card-3:hover { border-color: rgba(26,92,138,0.5); }
+  .home-card-4:hover { border-color: rgba(26,92,92,0.5); }
+  .card-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .card-num-1 { background: #1a3a5c; } .card-num-2 { background: #2a5c8a; }
+  .card-num-3 { background: #1a5c8a; } .card-num-4 { background: #1a5c5c; }
+
+  .home-card-map { position: relative; overflow: hidden; height: 340px; }
+  .home-card-map svg { width: 100%; height: 100%; display: block; }
+  .home-card-map-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px; background: linear-gradient(160deg,rgba(250,250,248,0.72) 0%,transparent 38%,transparent 62%,rgba(250,250,248,0.55) 100%); pointer-events: none; }
+  .home-card-map-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .home-card-map-title { font-size: 17px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+  .home-card-map-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; margin-bottom: 16px; }
+  .home-card-map-cta { font-size: 11px; color: var(--text-dim); pointer-events: none; }
+  .home-card:hover .home-card-map-cta { color: var(--blue); }
+  .home-card-map-bottom { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 10px; color: var(--text-muted); }
+  .hcl-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-right: 3px; vertical-align: middle; }
+  .home-card-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 18px 20px 14px; }
+
+  /* CALENDAR CARD */
+  .cal-list { display: flex; flex-direction: column; padding: 0 20px 16px; }
+  .cal-item { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: start; }
+  .cal-item:last-child { border-bottom: none; }
+  .cal-date-day { font-size: 20px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; display: block; line-height: 1.1; }
+  .cal-date-mon { font-size: 10px; font-weight: 700; color: var(--blue); letter-spacing: 0.05em; text-transform: uppercase; display: block; }
+  .cal-scheme { font-size: 10px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+  .cal-event { font-size: 12px; color: var(--text); line-height: 1.45; }
+  .cal-soon { font-size: 10px; font-weight: 600; color: #9a2a2a; margin-top: 2px; }
+  .cal-away { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+  /* SCHEME INDEX CARD */
+  .scheme-list { display: flex; flex-direction: column; }
+  .scheme-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 9px 20px; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; transition: background 0.1s; }
+  .scheme-row:last-child { border-bottom: none; }
+  .scheme-row:hover { background: rgba(26,92,138,0.04); }
+  .scheme-name { font-size: 12px; font-weight: 700; color: var(--text); }
+  .scheme-jurisdiction { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+  .scheme-right { text-align: right; }
+  .scheme-price { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .scheme-type-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 2px; }
+  .type-ets  { background: var(--ets-bg);  color: var(--ets-text); }
+  .type-tax  { background: var(--tax-bg);  color: var(--tax-text); }
+  .type-both { background: var(--both-bg); color: var(--both-text); }
+
+  /* LOCKED CARD */
+  .lock-body { padding: 0 20px 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+  .lock-box { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 1px solid rgba(26,92,92,0.2); border-radius: 10px; background: rgba(26,92,92,0.04); }
+  .lock-icon { font-size: 20px; opacity: 0.45; flex-shrink: 0; padding-top: 1px; }
+  .lock-label { font-size: 13px; font-weight: 600; color: var(--teal); }
+  .lock-sub { font-size: 11px; color: var(--text-dim); margin-top: 3px; line-height: 1.55; }
+  .lock-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lock-tag { font-size: 10px; padding: 3px 10px; border-radius: 20px; background: rgba(26,92,92,0.08); color: var(--teal); font-weight: 600; }
+
+  /* DETAIL PANEL */
+  .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; }
+  .detail-overlay.open { display: block; }
+  .detail-panel { position: fixed; top: 0; right: -480px; width: 440px; max-width: 95vw; height: 100vh; background: var(--bg); border-left: 1px solid var(--border); z-index: 201; overflow-y: auto; transition: right 0.22s ease; box-shadow: -4px 0 24px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+  .detail-panel.open { right: 0; }
+  .panel-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .panel-close { font-size: 22px; color: var(--text-dim); cursor: pointer; background: none; border: none; line-height: 1; padding: 0; flex-shrink: 0; }
+  .panel-close:hover { color: var(--text); }
+  .panel-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); line-height: 1.2; }
+  .panel-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .panel-body { padding: 20px 24px; flex: 1; }
+  .panel-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 18px; }
+  .panel-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .panel-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); margin-bottom: 4px; }
+  .panel-stat-value { font-size: 19px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .panel-stat-unit { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .panel-section { margin-bottom: 16px; }
+  .panel-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 6px; }
+  .panel-p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .panel-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-block; }
+  .panel-link { font-size: 12px; color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+  .panel-link:hover { opacity: 0.75; }
+  .panel-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  /* MAP TOOLTIP */
+  .map-tooltip { position: fixed; background: #1a1a18; color: #fff; font-size: 12px; padding: 6px 10px; border-radius: 6px; pointer-events: none; opacity: 0; transition: opacity 0.1s; white-space: nowrap; z-index: 300; line-height: 1.5; }
+  .map-tooltip.visible { opacity: 1; }
+
+  /* FOOTER */
+  footer { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
+  .footer-note { font-size: 12px; color: var(--text-dim); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-link { font-size: 12px; color: var(--text-dim); cursor: pointer; transition: color 0.15s; }
+  .footer-link:hover { color: var(--text-muted); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .home-hero { padding: 28px 24px 20px; }
+    .hero-h { font-size: 26px; }
+    .home-card-1 { height: auto; }
+    .home-card-map { height: 220px; }
+    footer { padding: 16px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .detail-panel { width: 100%; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="map-tooltip" id="map-tooltip"></div>
+
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-item">
+    <span class="mobile-menu-num card-num-1">1</span>Jurisdiction Map
+  </div>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-item">
+    <span class="mobile-menu-num card-num-2">2</span>Compliance Calendar
+  </div>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-item">
+    <span class="mobile-menu-num card-num-3">3</span>Scheme Index
+  </div>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-item">
+    <span class="mobile-menu-num card-num-4">4</span>Who's Who
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.3"/>
+        <ellipse cx="9" cy="9" rx="3.2" ry="7" stroke="white" stroke-width="1.3"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.3"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-name">Carbon Atlas</span>
+      <span class="logo-sub">Carbon pricing intelligence</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-cta" onclick="openAbout()">About</button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div id="view-home">
+  <div class="home-hero">
+    <h1 class="hero-h">Carbon pricing, mapped and explained</h1>
+    <p class="hero-sub">10 schemes tracked - compliance calendars, scheme detail, and the people behind the rules</p>
+  </div>
+  <div class="home-grid">
+
+    <!-- Card 1: Jurisdiction Map -->
+    <div class="home-card home-card-1">
+      <div class="home-card-map">
+        <svg id="world-map" viewBox="0 0 700 380" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="home-card-map-overlay">
+          <div class="home-card-map-top">
+            <div>
+              <div class="home-card-map-title"><span class="card-num card-num-1">1</span>Jurisdiction Map</div>
+              <div class="home-card-map-sub">Click a highlighted country to explore the scheme</div>
+            </div>
+            <div class="home-card-map-cta">Click a country -></div>
+          </div>
+          <div class="home-card-map-bottom">
+            <span class="hcl-dot" style="background:var(--map-ets)"></span>ETS
+            <span class="hcl-dot" style="background:var(--map-tax);margin-left:8px"></span>Carbon tax
+            <span class="hcl-dot" style="background:var(--map-partial);margin-left:8px"></span>Sub-national
+            <span class="hcl-dot" style="background:var(--map-none);margin-left:8px"></span>None tracked
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Compliance Calendar -->
+    <div class="home-card home-card-2" onclick="window.location.href='calendar.html'" style="cursor:pointer;">
+      <div class="home-card-header">
+        <div>
+          <div class="home-card-map-title"><span class="card-num card-num-2">2</span>Compliance Calendar</div>
+          <div class="home-card-map-sub">Upcoming deadlines across all major schemes</div>
+        </div>
+        <div class="home-card-map-cta">View all -></div>
+      </div>
+      <div class="cal-list" id="cal-list"></div>
+    </div>
+
+    <!-- Card 3: Scheme Index -->
+    <div class="home-card home-card-3" onclick="window.location.href='schemes.html'" style="cursor:pointer;">
+      <div class="home-card-header">
+        <div>
+          <div class="home-card-map-title"><span class="card-num card-num-3">3</span>Scheme Index</div>
+          <div class="home-card-map-sub">Price, type, and coverage at a glance</div>
+        </div>
+        <div class="home-card-map-cta">View all 10 -></div>
+      </div>
+      <div class="scheme-list" id="scheme-list"></div>
+    </div>
+
+    <!-- Card 4: Who's Who (locked) -->
+    <div class="home-card home-card-4">
+      <div class="home-card-header">
+        <div>
+          <div class="home-card-map-title"><span class="card-num card-num-4">4</span>Who's Who</div>
+          <div class="home-card-map-sub">The people who shape carbon pricing policy</div>
+        </div>
+        <div class="home-card-map-cta" style="color:var(--text-dim);">Coming soon</div>
+      </div>
+      <div class="lock-body">
+        <div class="lock-box">
+          <div class="lock-icon">&#128274;</div>
+          <div>
+            <div class="lock-label">In development</div>
+            <div class="lock-sub">Profiles of the regulators, economists, and officials who designed and run the world's carbon pricing schemes - from the EU ETS architects to the ICAP secretariat.</div>
+          </div>
+        </div>
+        <div class="lock-tags">
+          <span class="lock-tag">Regulators</span>
+          <span class="lock-tag">Scheme architects</span>
+          <span class="lock-tag">Policy advisors</span>
+          <span class="lock-tag">Academic researchers</span>
+          <span class="lock-tag">Market analysts</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span class="footer-note">Carbon Atlas &mdash; working title. Data current as of April 2026.</span>
+  <div class="footer-links">
+    <span class="footer-link" onclick="openAbout()">About</span>
+    <span class="footer-link">Sources</span>
+  </div>
+</footer>
+
+<!-- Detail Panel -->
+<div class="detail-overlay" id="detail-overlay" onclick="closePanel()"></div>
+<div class="detail-panel" id="detail-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-title" id="panel-title"></div>
+      <div class="panel-sub" id="panel-sub"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">&#215;</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+
+// ---- DATA ----
+
+const SCHEMES = [
+  {
+    id:'EU-ETS', name:'EU ETS', fullName:'EU Emissions Trading System',
+    jurisdiction:'27 EU member states + Norway, Iceland, Liechtenstein',
+    type:'ets', price:'~64', currency:'EUR', unit:'per tonne CO2',
+    status:'active', launched:'2005', coverage:'~40% of EU emissions',
+    sectors:'Power, heavy industry, aviation, maritime',
+    isos:[40,56,100,191,196,203,208,233,246,250,276,300,348,372,380,428,440,442,470,528,616,620,642,703,705,724,752,578,352,438],
+    description:'The world\'s largest carbon market by value, covering around 40% of EU greenhouse gas emissions. Power generators, heavy industry, and aviation all participate. Around 10,000 installations are regulated.',
+    link:'https://climate.ec.europa.eu/eu-action/carbon-markets_en'
+  },
+  {
+    id:'UK-ETS', name:'UK ETS', fullName:'UK Emissions Trading Scheme',
+    jurisdiction:'United Kingdom',
+    type:'ets', price:'~44', currency:'GBP', unit:'per tonne CO2',
+    status:'active', launched:'2021', coverage:'~30% of UK emissions',
+    sectors:'Power, heavy industry, aviation',
+    isos:[826],
+    description:'Launched after the UK left the EU ETS. Closely modelled on the EU system and covers power generation, energy-intensive industries, and aviation. A linking arrangement with the EU ETS has been under discussion.',
+    link:'https://www.gov.uk/government/collections/uk-ets'
+  },
+  {
+    id:'CCA', name:'CCA', fullName:'California Cap-and-Trade',
+    jurisdiction:'California (linked to Quebec since 2014)',
+    type:'ets', price:'~30', currency:'USD', unit:'per tonne CO2e',
+    status:'active', launched:'2013', coverage:'~80% of CA emissions',
+    sectors:'Power, industry, transport fuels',
+    isos:[],
+    description:'One of the most established sub-national schemes globally. Linked to Quebec since 2014, creating a joint carbon market. Covers around 80% of Californian emissions across power, industry, and fuel distributors.',
+    link:'https://ww2.arb.ca.gov/our-work/programs/cap-and-trade-program'
+  },
+  {
+    id:'RGGI', name:'RGGI', fullName:'Regional Greenhouse Gas Initiative',
+    jurisdiction:'11 northeastern US states',
+    type:'ets', price:'~14', currency:'USD', unit:'per tonne CO2',
+    status:'active', launched:'2009', coverage:'Power sector in 11 states',
+    sectors:'Power generation only',
+    isos:[],
+    description:'A cooperative effort among northeastern US states to cut power sector carbon emissions. The first mandatory market-based programme in the United States. Quarterly auctions determine the price.',
+    link:'https://www.rggi.org'
+  },
+  {
+    id:'CA-OBPS', name:'Canada OBPS', fullName:'Canada Output-Based Pricing System',
+    jurisdiction:'Canada (federal backstop)',
+    type:'ets', price:'~95', currency:'CAD', unit:'per tonne CO2e',
+    status:'active', launched:'2019', coverage:'Large industrial emitters',
+    sectors:'Large industrial facilities',
+    isos:[124],
+    description:'Canadas federal carbon pricing backstop for large industrial facilities. Provinces with their own equivalent systems are exempt from the federal backstop. The price rises annually - reaching CAD 170 per tonne by 2030.',
+    link:'https://www.canada.ca/en/environment-climate-change/services/climate-change/output-based-pricing-system.html'
+  },
+  {
+    id:'CN-ETS', name:'China ETS', fullName:'China National Emissions Trading System',
+    jurisdiction:'China',
+    type:'ets', price:'~90', currency:'CNY', unit:'per tonne CO2',
+    status:'active', launched:'2021', coverage:'~28% of national emissions',
+    sectors:'Power, steel, cement, aluminium',
+    isos:[156],
+    description:'The world\'s largest emissions trading system by volume. Expanded to steel, cement, and aluminium in 2025. Over 8,000 facilities are now regulated. The system uses intensity-based benchmarks rather than absolute caps.',
+    link:'https://english.mee.gov.cn'
+  },
+  {
+    id:'NZ-ETS', name:'NZ ETS', fullName:'New Zealand Emissions Trading Scheme',
+    jurisdiction:'New Zealand',
+    type:'ets', price:'~52', currency:'NZD', unit:'per tonne CO2e',
+    status:'active', launched:'2008', coverage:'~50% of NZ emissions',
+    sectors:'Forestry, energy, industry, waste',
+    isos:[554],
+    description:'One of the older established ETSs and notable for its inclusion of the forestry sector. The scheme has gone through several significant reforms since launch, including the removal of the one-for-two surrender obligation.',
+    link:'https://www.epa.govt.nz/industry-areas/emissions-trading-scheme/'
+  },
+  {
+    id:'AU-SM', name:'Australia', fullName:'Australia Safeguard Mechanism',
+    jurisdiction:'Australia',
+    type:'ets', price:'~33', currency:'AUD', unit:'per tonne CO2e',
+    status:'active', launched:'2023', coverage:'~215 large facilities',
+    sectors:'Large industrial facilities (100,000t+ threshold)',
+    isos:[36],
+    description:'Reformed in 2023, the Safeguard Mechanism sets declining emissions baselines for Australia\'s largest industrial emitters. Facilities exceeding their baseline must purchase Australian Carbon Credit Units or Safeguard Mechanism Credits.',
+    link:'https://www.cleanenergyregulator.gov.au/Safeguard'
+  },
+  {
+    id:'KR-ETS', name:'Korea ETS', fullName:'South Korea Emissions Trading Scheme',
+    jurisdiction:'South Korea',
+    type:'ets', price:'~9,800', currency:'KRW', unit:'per tonne CO2',
+    status:'active', launched:'2015', coverage:'~73% of national emissions',
+    sectors:'Power, industry, buildings, aviation, waste',
+    isos:[410],
+    description:'Asia-Pacific\'s first national ETS and one of the most comprehensive in scope. Around 685 companies participate across power, industry, buildings, aviation, and waste. Covers approximately 73% of national emissions.',
+    link:'https://ets.krx.co.kr'
+  },
+  {
+    id:'SG-CT', name:'Singapore', fullName:'Singapore Carbon Tax',
+    jurisdiction:'Singapore',
+    type:'tax', price:'25', currency:'SGD', unit:'per tonne CO2e',
+    status:'active', launched:'2019', coverage:'~80% of national emissions',
+    sectors:'Facilities emitting 25,000t or more annually',
+    isos:[702],
+    description:'Applies to facilities emitting 25,000 tonnes or more of greenhouse gases per year. The rate rises to SGD 45 in 2026-2027 and is targeted at SGD 50-80 by 2030. Singapore allows the use of high-quality international carbon credits to meet part of the obligation.',
+    link:'https://www.mse.gov.sg/policies/climate-change/carbon-tax'
+  }
+];
+
+// US partial (CCA + RGGI are sub-national)
+const PARTIAL_ISOS = new Set([840]);
+
+const schemeById = {};
+const isoToSchemes = {};
+SCHEMES.forEach(s => {
+  schemeById[s.id] = s;
+  s.isos.forEach(iso => {
+    if(!isoToSchemes[iso]) isoToSchemes[iso] = [];
+    isoToSchemes[iso].push(s.id);
+  });
+});
+
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const TODAY = new Date('2026-04-12');
+
+const CALENDAR = [
+  { date:'2026-04-30', scheme:'EU ETS',         event:'2025 allowance surrender deadline' },
+  { date:'2026-04-30', scheme:'UK ETS',         event:'2025 allowance surrender deadline' },
+  { date:'2026-05-31', scheme:'NZ ETS',         event:'2025 annual surrender deadline' },
+];
+
+// ---- PANEL ----
+
+function openPanel(titleHtml, subHtml, bodyHtml) {
+  document.getElementById('panel-title').innerHTML = titleHtml;
+  document.getElementById('panel-sub').innerHTML   = subHtml;
+  document.getElementById('panel-body').innerHTML  = bodyHtml;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
+
+function schemeBody(s) {
+  const typeLabel = s.type === 'ets' ? 'Emissions Trading System' : 'Carbon Tax';
+  return `
+    <span class="panel-badge type-${s.type}">${typeLabel}</span>
+    <div class="panel-stat-grid">
+      <div class="panel-stat">
+        <div class="panel-stat-label">Current price</div>
+        <div class="panel-stat-value">${s.currency} ${s.price}</div>
+        <div class="panel-stat-unit">${s.unit}</div>
+      </div>
+      <div class="panel-stat">
+        <div class="panel-stat-label">Launched</div>
+        <div class="panel-stat-value">${s.launched}</div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Coverage</div>
+      <div class="panel-p">${s.coverage}</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Sectors covered</div>
+      <div class="panel-p">${s.sectors}</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">About this scheme</div>
+      <div class="panel-p">${s.description}</div>
+    </div>
+    <div class="panel-section">
+      <a class="panel-link" href="${s.link}" target="_blank" rel="noopener">Official source -></a>
+    </div>
+  `;
+}
+
+function openSchemePanel(id) {
+  const s = schemeById[id];
+  if(!s) return;
+  openPanel(s.fullName, s.jurisdiction, schemeBody(s));
+}
+
+function openCountryPanel(iso) {
+  if(PARTIAL_ISOS.has(iso)) {
+    const schemes = [schemeById['CCA'], schemeById['RGGI']];
+    const body = schemes.map((s, i) => `
+      <div style="${i < schemes.length-1 ? 'margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)' : ''}">
+        <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)">${s.fullName}</div>
+        ${schemeBody(s)}
+      </div>`).join('');
+    openPanel('United States', 'Two sub-national schemes - no federal ETS', body);
+    return;
+  }
+  const ids = isoToSchemes[iso];
+  if(!ids || !ids.length) return;
+  if(ids.length === 1) { openSchemePanel(ids[0]); return; }
+  const schemes = ids.map(id => schemeById[id]);
+  const body = schemes.map((s, i) => `
+    <div style="${i < schemes.length-1 ? 'margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)' : ''}">
+      <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)">${s.fullName}</div>
+      ${schemeBody(s)}
+    </div>`).join('');
+  openPanel(schemes.map(s=>s.name).join(' + '), schemes.map(s=>s.jurisdiction).join(' / '), body);
+}
+
+function openAbout() {
+  openPanel('About Carbon Atlas', 'A working title', `
+    <div class="panel-section">
+      <div class="panel-p">Carbon Atlas is an independent reference tool covering the world's major carbon pricing schemes - emissions trading systems, carbon taxes, and hybrid mechanisms.</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-p">The goal is simple: take information that is spread across regulator websites, ICAP reports, and World Bank dashboards, and present it in one clean, navigable place.</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">What's here now</div>
+      <div class="panel-p">10 major schemes tracked. Compliance calendar updated for 2026. Scheme-level detail including price, coverage, sectors, and official sources.</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Coming next</div>
+      <div class="panel-p">Who's Who - profiles of the regulators, economists, and officials who designed and run these schemes. Price history. Scheme comparison tools.</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Data sources</div>
+      <div class="panel-p">ICAP ETS Map, World Bank Carbon Pricing Dashboard, individual scheme regulator publications. Prices are approximate spot indications and not financial data.</div>
+    </div>
+  `);
+}
+
+// ---- CALENDAR ----
+
+function renderCalendar() {
+  const el = document.getElementById('cal-list');
+  el.innerHTML = CALENDAR.map(ev => {
+    const d = new Date(ev.date);
+    const daysAway = Math.round((d - TODAY) / 86400000);
+    const day = d.getDate();
+    const mon = MONTHS[d.getMonth()];
+    const urgent = daysAway <= 30;
+    const dayLabel = daysAway <= 1 ? 'Today' : daysAway <= 7 ? `${daysAway} days away` : daysAway <= 60 ? `${daysAway} days away` : `${Math.round(daysAway/30)} months away`;
+    return `<div class="cal-item">
+      <div>
+        <span class="cal-date-day" style="${urgent ? 'color:#9a2a2a' : ''}">${day}</span>
+        <span class="cal-date-mon" style="${urgent ? 'color:#9a2a2a' : ''}">${mon}</span>
+      </div>
+      <div>
+        <div class="cal-scheme">${ev.scheme}</div>
+        <div class="cal-event">${ev.event}</div>
+        <div class="${urgent ? 'cal-soon' : 'cal-away'}">${dayLabel}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ---- SCHEME INDEX ----
+
+function renderSchemes() {
+  const el = document.getElementById('scheme-list');
+  el.innerHTML = SCHEMES.slice(0,3).map(s => {
+    const typeLabel = s.type === 'ets' ? 'ETS' : 'Carbon tax';
+    return `<div class="scheme-row" onclick="openSchemePanel('${s.id}');event.stopPropagation();">
+      <div>
+        <div class="scheme-name">${s.name}</div>
+        <div class="scheme-jurisdiction">${s.jurisdiction}</div>
+      </div>
+      <div class="scheme-right">
+        <div class="scheme-price">${s.currency}&thinsp;${s.price}</div>
+        <div><span class="scheme-type-badge type-${s.type}">${typeLabel}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ---- WORLD MAP ----
+
+function mapFill(iso) {
+  if(PARTIAL_ISOS.has(iso)) return 'var(--map-partial)';
+  const ids = isoToSchemes[iso];
+  if(!ids || !ids.length) return null;
+  if(ids.length > 1) return 'var(--map-both)';
+  return schemeById[ids[0]].type === 'tax' ? 'var(--map-tax)' : 'var(--map-ets)';
+}
+
+async function renderWorldMap() {
+  try {
+    const topo = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json');
+    const countries = topojson.feature(topo, topo.objects.countries);
+    const svg = d3.select('#world-map');
+    svg.selectAll('*').remove();
+    const W = 700, H = 380;
+    const proj = d3.geoNaturalEarth1().scale(118).translate([W/2, H/2 + 12]);
+    const path = d3.geoPath().projection(proj);
+
+    // Ocean background
+    svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#e8eff7');
+
+    svg.selectAll('path')
+      .data(countries.features)
+      .enter().append('path')
+      .attr('d', path)
+      .attr('fill', d => {
+        const iso = +d.id;
+        return mapFill(iso) || '#d0cdc6';
+      })
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 0.4)
+      .attr('cursor', d => {
+        const iso = +d.id;
+        return (isoToSchemes[iso] || PARTIAL_ISOS.has(iso)) ? 'pointer' : 'default';
+      })
+      .on('mouseover', function(event, d) {
+        const iso = +d.id;
+        const name = d.properties ? d.properties.name : '';
+        const hasScheme = isoToSchemes[iso] || PARTIAL_ISOS.has(iso);
+        if(hasScheme) {
+          d3.select(this).attr('opacity', 0.72);
+          const ids = PARTIAL_ISOS.has(iso) ? ['CCA','RGGI'] : (isoToSchemes[iso] || []);
+          const schemeNames = [...new Set(ids.map(id => schemeById[id]?.name || id))].join(', ');
+          showTooltip(event, `<strong>${name}</strong><br>${schemeNames}`);
+        } else {
+          showTooltip(event, `<span style="opacity:0.8">${name}</span><br><span style="opacity:0.5;font-size:11px">No scheme tracked</span>`);
+        }
+      })
+      .on('mousemove', moveTooltip)
+      .on('mouseout', function() {
+        d3.select(this).attr('opacity', 1);
+        hideTooltip();
+      })
+      .on('click', function(event, d) {
+        event.stopPropagation();
+        const iso = +d.id;
+        if(!isoToSchemes[iso] && !PARTIAL_ISOS.has(iso)) return;
+        openCountryPanel(iso);
+      });
+
+  } catch(e) { console.error('Map load failed:', e); }
+}
+
+// ---- TOOLTIP ----
+
+const tooltip = document.getElementById('map-tooltip');
+function showTooltip(ev, html) {
+  if(window.matchMedia('(hover: none)').matches) return;
+  tooltip.innerHTML = html;
+  tooltip.classList.add('visible');
+  moveTooltip(ev);
+}
+function moveTooltip(ev) {
+  tooltip.style.left = (ev.clientX + 14) + 'px';
+  tooltip.style.top  = (ev.clientY - 10) + 'px';
+}
+function hideTooltip() { tooltip.classList.remove('visible'); }
+
+// ---- NAV ----
+
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('#mobile-menu') && !e.target.closest('#hamburger')) {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  }
+});
+
+// ---- INIT ----
+
+renderCalendar();
+renderSchemes();
+renderWorldMap();
+
+</script>
+</body>
+</html>

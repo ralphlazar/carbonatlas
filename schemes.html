@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scheme Index - Carbon Atlas</title>
+<meta name="description" content="All major carbon pricing schemes - emissions trading systems and carbon taxes - with price, coverage, and sector detail.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #fafaf8; --bg3: #f5f5f2;
+    --border: #e8e8e5;
+    --blue: #1a3a5c; --blue-pale: #e0eaf5; --blue-mid: #2a5c8a;
+    --teal: #1a5c5c;
+    --text: #1a1a18; --text-muted: #5f5e5a; --text-dim: #999896;
+    --ets-bg: #e0eaf5; --ets-text: #1a3a5c;
+    --tax-bg: #faeeda; --tax-text: #633806;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .logo-mark { width: 30px; height: 30px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .logo-sub  { font-size: 11px; color: var(--text-muted); font-weight: 400; display: block; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.2s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 0 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .mobile-menu.open { display: block; }
+  .mobile-menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 24px; font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; transition: background 0.1s; }
+  .mobile-menu-item:hover { background: var(--bg2); }
+  .mobile-menu-divider { height: 1px; background: var(--border); margin: 8px 24px; }
+
+  /* PAGE */
+  .page-header { padding: 20px 40px 0; max-width: 900px; margin: 0 auto; }
+  .page-back { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; transition: color 0.15s; }
+  .page-back:hover { color: var(--text); }
+  .page-title { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); margin-bottom: 4px; }
+  .page-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+
+  /* FILTERS */
+  .filters { padding: 0 40px 20px; max-width: 900px; margin: 0 auto; display: flex; gap: 8px; }
+  .filter-chip { font-size: 11px; font-weight: 600; padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg2); color: var(--text-muted); cursor: pointer; transition: all 0.12s; }
+  .filter-chip:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-chip.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* SCHEME TABLE */
+  .scheme-body { max-width: 900px; margin: 0 auto; padding: 0 40px 60px; }
+  .scheme-table { width: 100%; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .scheme-table-head { display: grid; grid-template-columns: 2fr 1.4fr 100px 100px 80px; gap: 0; background: var(--bg2); border-bottom: 1px solid var(--border); }
+  .th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); padding: 10px 16px; }
+  .th-right { text-align: right; }
+  .scheme-row { display: grid; grid-template-columns: 2fr 1.4fr 100px 100px 80px; gap: 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; align-items: center; }
+  .scheme-row:last-child { border-bottom: none; }
+  .scheme-row:hover { background: var(--blue-pale); }
+  .td { padding: 14px 16px; min-width: 0; }
+  .td-right { text-align: right; }
+  .scheme-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .scheme-full { font-size: 11px; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .scheme-jurisdiction { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+  .type-badge { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+  .type-ets { background: var(--ets-bg); color: var(--ets-text); }
+  .type-tax { background: var(--tax-bg); color: var(--tax-text); }
+  .scheme-price { font-size: 14px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .scheme-currency { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
+  .scheme-coverage { font-size: 11px; color: var(--text-muted); }
+  .scheme-arrow { font-size: 14px; color: var(--text-dim); }
+  .scheme-row:hover .scheme-arrow { color: var(--blue); }
+
+  /* SUMMARY BAR */
+  .summary-bar { display: flex; gap: 32px; padding: 0 40px 20px; max-width: 900px; margin: 0 auto; }
+  .summary-stat { }
+  .summary-val { font-size: 22px; font-weight: 700; color: var(--blue); letter-spacing: -0.03em; }
+  .summary-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); margin-top: 1px; }
+
+  /* EMPTY */
+  .scheme-empty { padding: 32px 0; font-size: 13px; color: var(--text-dim); display: none; }
+  .scheme-empty.visible { display: block; }
+
+  /* DETAIL PANEL */
+  .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; }
+  .detail-overlay.open { display: block; }
+  .detail-panel { position: fixed; top: 0; right: -480px; width: 440px; max-width: 95vw; height: 100vh; background: var(--bg); border-left: 1px solid var(--border); z-index: 201; overflow-y: auto; transition: right 0.22s ease; box-shadow: -4px 0 24px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+  .detail-panel.open { right: 0; }
+  .panel-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .panel-close { font-size: 22px; color: var(--text-dim); cursor: pointer; background: none; border: none; line-height: 1; padding: 0; flex-shrink: 0; }
+  .panel-close:hover { color: var(--text); }
+  .panel-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); line-height: 1.2; }
+  .panel-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .panel-body { padding: 20px 24px; flex: 1; }
+  .panel-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 18px; }
+  .panel-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .panel-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); margin-bottom: 4px; }
+  .panel-stat-value { font-size: 19px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .panel-stat-unit { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .panel-section { margin-bottom: 16px; }
+  .panel-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 6px; }
+  .panel-p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .panel-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-block; }
+  .panel-link { font-size: 12px; color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+  .panel-link:hover { opacity: 0.75; }
+
+  footer { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); max-width: 900px; margin: 0 auto; }
+  .footer-note { font-size: 12px; color: var(--text-dim); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .page-header { padding: 20px 20px 0; }
+    .filters { padding: 0 20px 16px; }
+    .summary-bar { padding: 0 20px 16px; gap: 20px; }
+    .scheme-body { padding: 0 20px 40px; }
+    .scheme-table-head { display: none; }
+    .scheme-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 2px; padding: 0; }
+    .td { padding: 10px 14px; }
+    .td:nth-child(2) { display: none; }
+    .td:nth-child(3) { grid-column: 1; grid-row: 2; padding-top: 0; }
+    .td:nth-child(4) { grid-column: 2; grid-row: 1 / 3; display: flex; align-items: center; }
+    .td:nth-child(5) { display: none; }
+    footer { padding: 16px 20px; }
+    .detail-panel { width: 100%; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div id="mobile-menu" class="mobile-menu">
+  <a class="mobile-menu-item" href="index.html">Home</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="calendar.html">Compliance Calendar</a>
+  <div class="mobile-menu-divider"></div>
+  <div class="mobile-menu-item" style="color:var(--blue);font-weight:600;">Scheme Index</div>
+</div>
+
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.3"/>
+        <ellipse cx="9" cy="9" rx="3.2" ry="7" stroke="white" stroke-width="1.3"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.3"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-name">Carbon Atlas</span>
+      <span class="logo-sub">Carbon pricing intelligence</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <a class="page-back" href="index.html">← Home</a>
+  <div class="page-title">Scheme Index</div>
+  <div class="page-sub">Every major carbon pricing scheme - type, price, coverage, and sectors covered</div>
+</div>
+
+<div class="summary-bar" id="summary-bar"></div>
+<div class="filters" id="filters"></div>
+
+<div class="scheme-body">
+  <div class="scheme-table">
+    <div class="scheme-table-head">
+      <div class="th">Scheme</div>
+      <div class="th">Jurisdiction</div>
+      <div class="th">Type</div>
+      <div class="th th-right">Price</div>
+      <div class="th th-right">Coverage</div>
+    </div>
+    <div id="scheme-rows"></div>
+  </div>
+  <div class="scheme-empty" id="scheme-empty">No schemes match the selected filter.</div>
+</div>
+
+<footer>
+  <span class="footer-note">Prices are approximate spot indications as of April 2026. Not financial data.</span>
+</footer>
+
+<div class="detail-overlay" id="detail-overlay" onclick="closePanel()"></div>
+<div class="detail-panel" id="detail-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-title" id="panel-title"></div>
+      <div class="panel-sub" id="panel-sub"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">&#215;</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
+<script>
+
+const SCHEMES = [
+  { id:'EU-ETS',  name:'EU ETS',    fullName:'EU Emissions Trading System',            type:'ets', price:'~64',    currency:'EUR', unit:'per tonne CO2',  launched:'2005', coverage:'~40% of EU emissions',      sectors:'Power, heavy industry, aviation, maritime',         jurisdiction:'27 EU member states + Norway, Iceland, Liechtenstein', description:'The world\'s largest carbon market by value, covering around 40% of EU greenhouse gas emissions. Power generators, heavy industry, and aviation all participate. Around 10,000 installations are regulated.', link:'https://climate.ec.europa.eu/eu-action/carbon-markets_en' },
+  { id:'UK-ETS',  name:'UK ETS',    fullName:'UK Emissions Trading Scheme',             type:'ets', price:'~44',    currency:'GBP', unit:'per tonne CO2',  launched:'2021', coverage:'~30% of UK emissions',      sectors:'Power, heavy industry, aviation',                   jurisdiction:'United Kingdom',                                        description:'Launched after the UK left the EU ETS. Closely modelled on the EU system. Covers power generation, energy-intensive industries, and aviation.',                                                            link:'https://www.gov.uk/government/collections/uk-ets' },
+  { id:'CCA',     name:'CCA',       fullName:'California Cap-and-Trade',                type:'ets', price:'~30',    currency:'USD', unit:'per tonne CO2e', launched:'2013', coverage:'~80% of CA emissions',      sectors:'Power, industry, transport fuels',                  jurisdiction:'California (linked to Quebec)',                          description:'One of the most established sub-national schemes globally. Linked to Quebec since 2014. Covers around 80% of Californian emissions across power, industry, and fuel distributors.',                        link:'https://ww2.arb.ca.gov/our-work/programs/cap-and-trade-program' },
+  { id:'RGGI',    name:'RGGI',      fullName:'Regional Greenhouse Gas Initiative',      type:'ets', price:'~14',    currency:'USD', unit:'per tonne CO2',  launched:'2009', coverage:'Power sector, 11 states',   sectors:'Power generation only',                             jurisdiction:'11 northeastern US states',                              description:'A cooperative effort among northeastern US states to cut power sector carbon emissions. The first mandatory market-based programme in the United States.',                                                   link:'https://www.rggi.org' },
+  { id:'CA-OBPS', name:'Canada',    fullName:'Canada Output-Based Pricing System',      type:'ets', price:'~95',    currency:'CAD', unit:'per tonne CO2e', launched:'2019', coverage:'Large industrial emitters',  sectors:'Large industrial facilities',                       jurisdiction:'Canada (federal backstop)',                              description:'Canada\'s federal carbon pricing backstop for large industrial facilities. Provinces with equivalent systems are exempt. Price rises to CAD 170 per tonne by 2030.',                                        link:'https://www.canada.ca/en/environment-climate-change/services/climate-change/output-based-pricing-system.html' },
+  { id:'CN-ETS',  name:'China ETS', fullName:'China National Emissions Trading System', type:'ets', price:'~90',    currency:'CNY', unit:'per tonne CO2',  launched:'2021', coverage:'~28% of national emissions', sectors:'Power, steel, cement, aluminium',                   jurisdiction:'China',                                                  description:'The world\'s largest emissions trading system by volume. Expanded to steel, cement, and aluminium in 2025. Over 8,000 facilities regulated.',                                                               link:'https://english.mee.gov.cn' },
+  { id:'NZ-ETS',  name:'NZ ETS',    fullName:'New Zealand Emissions Trading Scheme',    type:'ets', price:'~52',    currency:'NZD', unit:'per tonne CO2e', launched:'2008', coverage:'~50% of NZ emissions',      sectors:'Forestry, energy, industry, waste',                 jurisdiction:'New Zealand',                                            description:'One of the older established ETSs and notable for its inclusion of the forestry sector. Reformed several times since launch.',                                                                              link:'https://www.epa.govt.nz/industry-areas/emissions-trading-scheme/' },
+  { id:'AU-SM',   name:'Australia', fullName:'Australia Safeguard Mechanism',           type:'ets', price:'~33',    currency:'AUD', unit:'per tonne CO2e', launched:'2023', coverage:'~215 large facilities',      sectors:'Large industrial facilities (100,000t+ threshold)', jurisdiction:'Australia',                                              description:'Reformed in 2023. Sets declining emissions baselines for Australia\'s largest industrial emitters. Facilities exceeding their baseline must purchase Australian Carbon Credit Units.',                       link:'https://www.cleanenergyregulator.gov.au/Safeguard' },
+  { id:'KR-ETS',  name:'Korea ETS', fullName:'South Korea Emissions Trading Scheme',   type:'ets', price:'~9,800', currency:'KRW', unit:'per tonne CO2',  launched:'2015', coverage:'~73% of national emissions', sectors:'Power, industry, buildings, aviation, waste',       jurisdiction:'South Korea',                                            description:'Asia-Pacific\'s first national ETS. Around 685 companies participate across power, industry, buildings, aviation, and waste.',                                                                              link:'https://ets.krx.co.kr' },
+  { id:'SG-CT',   name:'Singapore', fullName:'Singapore Carbon Tax',                   type:'tax', price:'25',     currency:'SGD', unit:'per tonne CO2e', launched:'2019', coverage:'~80% of national emissions', sectors:'Facilities emitting 25,000t+ annually',             jurisdiction:'Singapore',                                              description:'Applies to facilities emitting 25,000 tonnes or more per year. Rate rises to SGD 45 in 2026-2027 and is targeted at SGD 50-80 by 2030.',                                                                   link:'https://www.mse.gov.sg/policies/climate-change/carbon-tax' },
+];
+
+let activeFilter = 'all';
+
+function renderSummary(schemes) {
+  const ets = schemes.filter(s => s.type === 'ets').length;
+  const tax = schemes.filter(s => s.type === 'tax').length;
+  document.getElementById('summary-bar').innerHTML = `
+    <div class="summary-stat"><div class="summary-val">${schemes.length}</div><div class="summary-label">Schemes tracked</div></div>
+    <div class="summary-stat"><div class="summary-val">${ets}</div><div class="summary-label">ETS schemes</div></div>
+    <div class="summary-stat"><div class="summary-val">${tax}</div><div class="summary-label">Carbon taxes</div></div>
+  `;
+}
+
+function renderFilters() {
+  document.getElementById('filters').innerHTML = `
+    <button class="filter-chip active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-chip" onclick="setFilter('ets',this)">ETS only</button>
+    <button class="filter-chip" onclick="setFilter('tax',this)">Carbon tax only</button>
+  `;
+}
+
+function render() {
+  const schemes = activeFilter === 'all' ? SCHEMES : SCHEMES.filter(s => s.type === activeFilter);
+  const empty = document.getElementById('scheme-empty');
+  renderSummary(schemes);
+  if(!schemes.length) {
+    document.getElementById('scheme-rows').innerHTML = '';
+    empty.classList.add('visible');
+    return;
+  }
+  empty.classList.remove('visible');
+  document.getElementById('scheme-rows').innerHTML = schemes.map(s => `
+    <div class="scheme-row" onclick="openPanel('${s.id}')">
+      <div class="td">
+        <div class="scheme-name">${s.name}</div>
+        <div class="scheme-full">${s.fullName}</div>
+      </div>
+      <div class="td">
+        <div class="scheme-jurisdiction">${s.jurisdiction}</div>
+      </div>
+      <div class="td">
+        <span class="type-badge type-${s.type}">${s.type === 'ets' ? 'ETS' : 'Carbon tax'}</span>
+      </div>
+      <div class="td td-right">
+        <div class="scheme-price">${s.currency}&thinsp;${s.price}</div>
+        <div class="scheme-currency">${s.unit}</div>
+      </div>
+      <div class="td td-right">
+        <span class="scheme-arrow">→</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setFilter(type, el) {
+  activeFilter = type;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function openPanel(id) {
+  const s = SCHEMES.find(x => x.id === id);
+  if(!s) return;
+  const typeLabel = s.type === 'ets' ? 'Emissions Trading System' : 'Carbon Tax';
+  document.getElementById('panel-title').textContent = s.fullName;
+  document.getElementById('panel-sub').textContent   = s.jurisdiction;
+  document.getElementById('panel-body').innerHTML = `
+    <span class="panel-badge type-${s.type}">${typeLabel}</span>
+    <div class="panel-stat-grid">
+      <div class="panel-stat"><div class="panel-stat-label">Current price</div><div class="panel-stat-value">${s.currency}&thinsp;${s.price}</div><div class="panel-stat-unit">${s.unit}</div></div>
+      <div class="panel-stat"><div class="panel-stat-label">Launched</div><div class="panel-stat-value">${s.launched}</div></div>
+    </div>
+    <div class="panel-section"><div class="panel-section-title">Coverage</div><div class="panel-p">${s.coverage}</div></div>
+    <div class="panel-section"><div class="panel-section-title">Sectors covered</div><div class="panel-p">${s.sectors}</div></div>
+    <div class="panel-section"><div class="panel-section-title">About this scheme</div><div class="panel-p">${s.description}</div></div>
+    <div class="panel-section"><a class="panel-link" href="${s.link}" target="_blank" rel="noopener">Official source -></a></div>
+  `;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
+
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if(!e.target.closest('#mobile-menu') && !e.target.closest('#hamburger')) {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  }
+});
+
+renderFilters();
+render();
+
+</script>
+</body>
+</html>
