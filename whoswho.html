@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Who's Who - Carbon Atlas</title>
+<meta name="description" content="The officials and economists who design and run the world's major carbon pricing schemes.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #fafaf8; --bg3: #f5f5f2;
+    --border: #e8e8e5;
+    --blue: #1a3a5c; --blue-pale: #e0eaf5; --blue-mid: #2a5c8a;
+    --teal: #1a5c5c;
+    --text: #1a1a18; --text-muted: #5f5e5a; --text-dim: #999896;
+    --ets-bg: #e0eaf5; --ets-text: #1a3a5c;
+    --tax-bg: #faeeda; --tax-text: #633806;
+    --global-bg: #e8e8e2; --global-text: #5a5854;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .logo-mark { width: 30px; height: 30px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; display: block; }
+  .nav-right { display: flex; align-items: center; }
+  .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
+  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 0 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .mobile-menu.open { display: block; }
+  .mobile-menu-item { display: block; padding: 13px 24px; font-size: 15px; font-weight: 500; color: var(--text); }
+  .mobile-menu-divider { height: 1px; background: var(--border); margin: 8px 24px; }
+
+  /* PAGE */
+  .page-header { padding: 20px 40px 0; max-width: 980px; margin: 0 auto; }
+  .page-back { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; transition: color 0.15s; }
+  .page-back:hover { color: var(--text); }
+  .page-title { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); margin-bottom: 4px; }
+  .page-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+  /* PROFILES GRID */
+  .profiles-wrap { max-width: 980px; margin: 0 auto; padding: 0 40px 64px; }
+  .profiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
+
+  /* PROFILE CARD */
+  .profile-card { border: 1px solid var(--border); border-radius: 12px; padding: 26px; background: var(--bg); transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; }
+  .profile-card:hover { border-color: rgba(26,58,92,0.28); box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .profile-top { display: flex; align-items: flex-start; gap: 16px; }
+  .profile-avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0; letter-spacing: 0.04em; }
+  .profile-id { flex: 1; min-width: 0; }
+  .profile-name { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; line-height: 1.2; }
+  .profile-role { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  .profile-org { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .profile-bio { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-top: 16px; flex: 1; }
+  .profile-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .scheme-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 4px; display: inline-block; }
+  .badge-ets    { background: var(--ets-bg);    color: var(--ets-text); }
+  .badge-global { background: var(--global-bg); color: var(--global-text); }
+  .profile-link { font-size: 11px; color: var(--text-dim); transition: color 0.15s; display: flex; align-items: center; gap: 4px; }
+  .profile-link:hover { color: var(--blue); }
+
+  /* EDITORIAL NOTE */
+  .editorial-note { max-width: 980px; margin: 0 auto; padding: 0 40px 40px; }
+  .note-box { font-size: 12px; color: var(--text-dim); background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; line-height: 1.65; }
+
+  footer { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); max-width: 980px; margin: 0 auto; }
+  .footer-note { font-size: 12px; color: var(--text-dim); }
+
+  @media (max-width: 900px) {
+    .profiles-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .page-header { padding: 20px 20px 0; }
+    .profiles-wrap { padding: 0 16px 48px; }
+    .editorial-note { padding: 0 16px 32px; }
+    footer { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="mobile-menu" class="mobile-menu">
+  <a class="mobile-menu-item" href="index.html">Home</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="map.html">Jurisdiction Map</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="calendar.html">Compliance Calendar</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="schemes.html">Scheme Index</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="prices.html">Prices</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="timeline.html">Timeline</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" style="color:var(--blue);font-weight:600;" href="whoswho.html">Who's Who</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.3"/>
+        <ellipse cx="9" cy="9" rx="3.2" ry="7" stroke="white" stroke-width="1.3"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.3"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-name">Carbon Atlas</span>
+      <span class="logo-sub">Carbon pricing intelligence</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <a class="page-back" href="index.html">← Home</a>
+  <div class="page-title">Who's Who</div>
+  <div class="page-sub">The officials and economists who design and run the world's major carbon pricing schemes</div>
+</div>
+
+<div class="profiles-wrap">
+  <div class="profiles-grid" id="profiles-grid"></div>
+</div>
+
+<div class="editorial-note">
+  <div class="note-box">Carbon Atlas profiles the senior officials, regulators, and advocates who shape carbon pricing policy globally. Profiles are selected editorially on the basis of verified, documented contributions to major schemes. This section is updated as the field evolves.</div>
+</div>
+
+<footer>
+  <span class="footer-note">Carbon Atlas - working title. Profiles current as of April 2026.</span>
+</footer>
+
+<script>
+const PROFILES = [
+  {
+    initials: 'WH',
+    name: 'Wopke Hoekstra',
+    role: 'Commissioner for Climate, Net Zero and Clean Growth',
+    org: 'European Commission',
+    scheme: 'EU ETS',
+    badgeClass: 'badge-ets',
+    bio: 'The EU\'s senior official on carbon markets, overseeing the world\'s largest emissions trading system and its expansion through ETS2 and CBAM. Reappointed for a full five-year term in December 2024, with a mandate to align climate ambition with industrial competitiveness.',
+    link: 'https://commission.europa.eu/about/organisation/college-commissioners/wopke-hoekstra_en',
+    linkLabel: 'European Commission'
+  },
+  {
+    initials: 'CF',
+    name: 'Christiana Figueres',
+    role: 'Former Executive Secretary (2010-2016)',
+    org: 'UN Framework Convention on Climate Change',
+    scheme: 'Paris Agreement',
+    badgeClass: 'badge-global',
+    bio: 'Led six years of international climate negotiations that rebuilt global consensus after the collapse of COP15 in Copenhagen, culminating in the unanimous adoption of the Paris Agreement in 2015. Now co-founder of Global Optimism and co-presenter of the Outrage + Optimism podcast.',
+    link: 'https://www.globaloptimism.com/christiana-figueres',
+    linkLabel: 'Global Optimism'
+  },
+  {
+    initials: 'JD',
+    name: 'Jos Delbeke',
+    role: 'Former Director-General, DG CLIMA (2010-2018); EIB Chair on Climate Policy',
+    org: 'European Commission / European University Institute',
+    scheme: 'EU ETS',
+    badgeClass: 'badge-ets',
+    bio: 'The principal architect of the EU ETS, having spent over three decades at the European Commission developing the world\'s largest carbon market across four trading phases. Now holds the EIB Chair on Climate Policy and International Carbon Markets at the European University Institute in Florence.',
+    link: 'https://www.eui.eu/people?id=jos-marie-r.-delbeke',
+    linkLabel: 'European University Institute'
+  },
+  {
+    initials: 'CH',
+    name: 'Connie Hedegaard',
+    role: 'Former Commissioner for Climate Action (2010-2014); Chair, OECD Round Table on Sustainable Development',
+    org: 'European Commission / OECD',
+    scheme: 'EU ETS',
+    badgeClass: 'badge-ets',
+    bio: 'As EU Climate Commissioner, drove the structural reforms that stabilised the EU ETS - including the Market Stability Reserve - and secured the legislative framework for the EU\'s 2030 climate targets. Currently chairs the OECD Round Table on Sustainable Development and multiple European advisory boards.',
+    link: 'https://www.oecd.org/en/about/bodies/round-table-on-sustainable-development.html',
+    linkLabel: 'OECD'
+  },
+  {
+    initials: 'MN',
+    name: 'Mary Nichols',
+    role: 'Former Chair (2007-2020)',
+    org: 'California Air Resources Board',
+    scheme: 'CCA',
+    badgeClass: 'badge-ets',
+    bio: 'Designed and built California\'s cap-and-trade programme over 13 years as CARB chair, overseeing the world\'s first formal linking of two sub-national carbon markets when California and Quebec joined forces in 2014. Described by Nature magazine as the most influential environmental regulator in history.',
+    link: 'https://ww2.arb.ca.gov/about/leadership/mary-d-nichols',
+    linkLabel: 'California ARB'
+  },
+  {
+    initials: 'LS',
+    name: 'Lauren Sanchez',
+    role: 'Chair',
+    org: 'California Air Resources Board',
+    scheme: 'CCA',
+    badgeClass: 'badge-ets',
+    bio: 'Head of the agency that runs one of the world\'s most comprehensive carbon markets. Appointed in 2025, she oversees California\'s cap-and-trade programme, Low Carbon Fuel Standard, and the state\'s pathway to net-zero emissions by 2045 - a programme that generated over $3 billion in auction revenues in 2024.',
+    link: 'https://ww2.arb.ca.gov/about',
+    linkLabel: 'California ARB'
+  },
+  {
+    initials: 'DF',
+    name: 'Dirk Forrister',
+    role: 'President and CEO',
+    org: 'International Emissions Trading Association (IETA)',
+    scheme: 'Global',
+    badgeClass: 'badge-global',
+    bio: 'The leading global advocate for market-based climate policy, representing over 350 companies active in carbon markets worldwide. Previously chaired the White House Climate Change Task Force during the Clinton Administration\'s Kyoto Protocol negotiations, and has been IETA\'s senior voice since 2012.',
+    link: 'https://www.ieta.org/about',
+    linkLabel: 'IETA'
+  },
+  {
+    initials: 'PR',
+    name: 'Dame Patsy Reddy',
+    role: 'Chair',
+    org: 'He Pou a Rangi Climate Change Commission',
+    scheme: 'NZ ETS',
+    badgeClass: 'badge-ets',
+    bio: 'Former Governor-General of New Zealand (2016-2021), appointed in February 2025 to chair the independent commission that advises the government on NZ ETS unit limits, price settings, and emissions budgets. Took over from founding chair Rod Carr as the scheme navigates surplus reduction and fragile market confidence heading into its second decade.',
+    link: 'https://www.climatecommission.govt.nz/news/new-chair-and-commissioners-announced',
+    linkLabel: 'Climate Change Commission'
+  }
+];
+
+function render() {
+  const grid = document.getElementById('profiles-grid');
+  grid.innerHTML = PROFILES.map(p => `
+    <div class="profile-card">
+      <div class="profile-top">
+        <div class="profile-avatar">${p.initials}</div>
+        <div class="profile-id">
+          <div class="profile-name">${p.name}</div>
+          <div class="profile-role">${p.role}</div>
+          <div class="profile-org">${p.org}</div>
+        </div>
+      </div>
+      <div class="profile-bio">${p.bio}</div>
+      <div class="profile-footer">
+        <span class="scheme-badge ${p.badgeClass}">${p.scheme}</span>
+        <a class="profile-link" href="${p.link}" target="_blank" rel="noopener">${p.linkLabel} -></a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+
+render();
+</script>
+</body>
+</html>

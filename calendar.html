@@ -35,11 +35,14 @@
   .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; }
   .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 0 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .mobile-menu { display: none; position: fixed; top: 57px; right: 32px; width: 200px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; z-index: 99; padding: 6px 0; box-shadow: 0 6px 20px rgba(0,0,0,0.10); }
   .mobile-menu.open { display: block; }
-  .mobile-menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 24px; font-size: 15px; font-weight: 500; color: var(--text); cursor: pointer; transition: background 0.1s; }
+  .mobile-menu-item { display: block; padding: 8px 18px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: background 0.1s; }
   .mobile-menu-item:hover { background: var(--bg2); }
-  .mobile-menu-divider { height: 1px; background: var(--border); margin: 8px 24px; }
+  .mobile-menu-divider { height: 1px; background: var(--border); margin: 4px 12px; }
+  @media (max-width: 768px) {
+    .mobile-menu { right: 16px; left: 16px; width: auto; }
+  }
 
   /* PAGE */
   .page-header { padding: 20px 40px 0; max-width: 860px; margin: 0 auto; }
@@ -130,9 +133,17 @@
 <div id="mobile-menu" class="mobile-menu">
   <a class="mobile-menu-item" href="index.html">Home</a>
   <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="map.html">Jurisdiction Map</a>
+  <div class="mobile-menu-divider"></div>
   <div class="mobile-menu-item" style="color:var(--blue);font-weight:600;">Compliance Calendar</div>
   <div class="mobile-menu-divider"></div>
   <a class="mobile-menu-item" href="schemes.html">Scheme Index</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="prices.html">Prices</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="timeline.html">Timeline</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="whoswho.html">Who's Who</a>
 </div>
 
 <nav>

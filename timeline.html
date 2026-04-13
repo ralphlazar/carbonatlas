@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline - Carbon Atlas</title>
+<meta name="description" content="The history of carbon pricing - every major scheme plotted from 1991 to today.">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --bg2: #fafaf8; --bg3: #f5f5f2;
+    --border: #e8e8e5;
+    --blue: #1a3a5c; --blue-pale: #e0eaf5; --blue-mid: #2a5c8a;
+    --teal: #1a5c5c;
+    --tax-color: #b06a00;
+    --text: #1a1a18; --text-muted: #5f5e5a; --text-dim: #999896;
+    --ets-bg: #e0eaf5; --ets-text: #1a3a5c;
+    --tax-bg: #faeeda; --tax-text: #633806;
+  }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 100; }
+  .nav-logo { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .logo-mark { width: 30px; height: 30px; background: var(--blue); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+  .logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 400; display: block; }
+  .nav-right { display: flex; align-items: center; }
+  .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
+  .mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--border); z-index: 99; padding: 8px 0 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .mobile-menu.open { display: block; }
+  .mobile-menu-item { display: block; padding: 13px 24px; font-size: 15px; font-weight: 500; color: var(--text); }
+  .mobile-menu-divider { height: 1px; background: var(--border); margin: 8px 24px; }
+
+  /* PAGE */
+  .page-header { padding: 20px 40px 0; max-width: 1100px; margin: 0 auto; }
+  .page-back { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; display: inline-flex; align-items: center; gap: 5px; transition: color 0.15s; }
+  .page-back:hover { color: var(--text); }
+  .page-title { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); margin-bottom: 4px; }
+  .page-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; }
+
+  /* TIMELINE SVG */
+  .timeline-wrap { padding: 0 40px; max-width: 1100px; margin: 0 auto; }
+  .timeline-container { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--bg2); }
+  #timeline-svg { width: 100%; display: block; cursor: default; }
+  .timeline-legend { display: flex; gap: 20px; padding: 12px 0 0; }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* CHRONOLOGICAL LIST */
+  .list-wrap { padding: 32px 40px 60px; max-width: 1100px; margin: 0 auto; }
+  .decade-section { margin-bottom: 32px; }
+  .decade-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-dim); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 12px; }
+  .scheme-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+  .scheme-card { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: background 0.1s, border-color 0.1s; background: var(--bg); }
+  .scheme-card:hover { background: var(--blue-pale); border-color: rgba(26,58,92,0.3); }
+  .sc-year { font-size: 11px; font-weight: 700; color: var(--text-dim); margin-bottom: 4px; }
+  .sc-name { font-size: 13px; font-weight: 700; color: var(--text); }
+  .sc-juris { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .sc-badge { margin-top: 6px; }
+  .type-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; display: inline-block; }
+  .type-ets { background: var(--ets-bg); color: var(--ets-text); }
+  .type-tax { background: var(--tax-bg); color: var(--tax-text); }
+
+  /* DETAIL PANEL */
+  .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; }
+  .detail-overlay.open { display: block; }
+  .detail-panel { position: fixed; top: 0; right: -480px; width: 440px; max-width: 95vw; height: 100vh; background: var(--bg); border-left: 1px solid var(--border); z-index: 201; overflow-y: auto; transition: right 0.22s ease; box-shadow: -4px 0 24px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+  .detail-panel.open { right: 0; }
+  .panel-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .panel-close { font-size: 22px; color: var(--text-dim); cursor: pointer; background: none; border: none; line-height: 1; padding: 0; flex-shrink: 0; }
+  .panel-close:hover { color: var(--text); }
+  .panel-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; color: var(--text); line-height: 1.2; }
+  .panel-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+  .panel-body { padding: 20px 24px; flex: 1; }
+  .panel-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 18px; }
+  .panel-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; }
+  .panel-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-dim); margin-bottom: 4px; }
+  .panel-stat-value { font-size: 19px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
+  .panel-stat-unit { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .panel-section { margin-bottom: 16px; }
+  .panel-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 6px; }
+  .panel-p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .panel-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; display: inline-block; }
+  .panel-link { font-size: 12px; color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+  .panel-link:hover { opacity: 0.75; }
+
+  footer { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); max-width: 1100px; margin: 0 auto; }
+  .footer-note { font-size: 12px; color: var(--text-dim); }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 24px; }
+    .page-header { padding: 20px 16px 0; }
+    .timeline-wrap { padding: 0 16px; }
+    .list-wrap { padding: 24px 16px 40px; }
+    .scheme-grid { grid-template-columns: 1fr; }
+    footer { padding: 16px 20px; }
+    .detail-panel { width: 100%; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div id="mobile-menu" class="mobile-menu">
+  <a class="mobile-menu-item" href="index.html">Home</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="map.html">Jurisdiction Map</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="calendar.html">Compliance Calendar</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="schemes.html">Scheme Index</a>
+  <div class="mobile-menu-divider"></div>
+  <a class="mobile-menu-item" href="prices.html">Prices</a>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.3"/>
+        <ellipse cx="9" cy="9" rx="3.2" ry="7" stroke="white" stroke-width="1.3"/>
+        <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="1.3"/>
+      </svg>
+    </div>
+    <div>
+      <span class="logo-name">Carbon Atlas</span>
+      <span class="logo-sub">Carbon pricing intelligence</span>
+    </div>
+  </a>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="page-header">
+  <a class="page-back" href="index.html">← Home</a>
+  <div class="page-title">Timeline</div>
+  <div class="page-sub">The history of carbon pricing - from the first carbon taxes in 1991 to 30 schemes tracked today</div>
+</div>
+
+<div class="timeline-wrap">
+  <div class="timeline-container">
+    <svg id="timeline-svg" viewBox="0 0 960 340" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+  <div class="timeline-legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Emissions trading system</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--tax-color)"></div>Carbon tax</div>
+    <div class="leg-item" style="margin-left:auto;font-size:11px;color:var(--text-dim);">Click any scheme to see detail</div>
+  </div>
+</div>
+
+<div class="list-wrap" id="list-wrap"></div>
+
+<footer>
+  <span class="footer-note">Carbon Atlas - working title. Launch years as per official scheme commencement dates.</span>
+</footer>
+
+<div class="detail-overlay" id="detail-overlay" onclick="closePanel()"></div>
+<div class="detail-panel" id="detail-panel">
+  <div class="panel-header">
+    <div>
+      <div class="panel-title" id="panel-title"></div>
+      <div class="panel-sub" id="panel-sub"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()">&#215;</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
+
+<script>
+const SCHEMES = [
+  { id:'SE-CT',   launchYear:1991, name:'Sweden',         fullName:'Sweden Carbon Tax',                            type:'tax', price:'~1,340',  currency:'SEK', unit:'per tonne CO2e', launched:'1991', coverage:'Transport and heating (non-EU ETS)',        sectors:'Transport fuels, heating fuels',                    jurisdiction:'Sweden',                                status:'active', description:'The world\'s highest carbon tax rate, introduced in 1991. Covers transport and heating not included in the EU ETS - Sweden also participates in the EU ETS for power and industry.',                                     link:'https://www.government.se/government-policy/swedens-carbon-tax/' },
+  { id:'NO-CT',   launchYear:1991, name:'Norway',         fullName:'Norway Carbon Tax',                            type:'tax', price:'~952',    currency:'NOK', unit:'per tonne CO2e', launched:'1991', coverage:'Offshore oil and gas, aviation, some onshore', sectors:'Oil and gas extraction, aviation, road transport', jurisdiction:'Norway',                                status:'active', description:'Introduced in 1991, primarily targeting offshore oil and gas. Norway also participates in the EU ETS as an EEA member. Some installations face both instruments simultaneously.',                                         link:'https://www.skatteetaten.no/en/business-and-organisation/vat-and-duties/excise-duties/about-the-excise-duties/carbon-tax/' },
+  { id:'EU-ETS',  launchYear:2005, name:'EU ETS',         fullName:'EU Emissions Trading System',                  type:'ets', price:'~64',     currency:'EUR', unit:'per tonne CO2e', launched:'2005', coverage:'~40% of EU emissions',                     sectors:'Power, heavy industry, aviation, maritime',         jurisdiction:'27 EU member states + Norway, Iceland, Liechtenstein', status:'active', description:'The world\'s largest carbon market by value. Covers power generators, heavy industry, and aviation across the EEA. Reformed under "Fit for 55" with a tightened cap trajectory and extended maritime coverage from 2024.',  link:'https://climate.ec.europa.eu/eu-action/eu-emissions-trading-system-eu-ets_en' },
+  { id:'AB-TIER', launchYear:2007, name:'Alberta TIER',   fullName:'Alberta Technology Innovation and Emissions Reduction', type:'ets', price:'~95', currency:'CAD', unit:'per tonne CO2e', launched:'2007', coverage:'Large facilities (100,000t+ threshold)', sectors:'Oil sands, power, cement, chemicals, pipelines', jurisdiction:'Alberta, Canada', status:'active', description:'Alberta has had carbon pricing since 2007. TIER uses output-based benchmarks for large industrial facilities rather than a hard cap. The rate matches the federal backstop level.', link:'https://www.alberta.ca/technology-innovation-and-emissions-reduction-regulation' },
+  { id:'NZ-ETS',  launchYear:2008, name:'NZ ETS',         fullName:'New Zealand Emissions Trading Scheme',         type:'ets', price:'~52',     currency:'NZD', unit:'per tonne CO2e', launched:'2008', coverage:'~50% of NZ emissions',                     sectors:'Forestry, energy, industry, waste',                jurisdiction:'New Zealand',                           status:'active', description:'Notable for its inclusion of the forestry sector. One of the older established ETSs, it has undergone several significant reforms since launch.',                                                                          link:'https://www.epa.govt.nz/industry-areas/emissions-trading-scheme/' },
+  { id:'CH-ETS',  launchYear:2008, name:'Switzerland ETS', fullName:'Switzerland Emissions Trading System',        type:'ets', price:'~64',     currency:'EUR', unit:'per tonne CO2e', launched:'2008', coverage:'~10% of Swiss emissions',                  sectors:'Industry, power, aviation',                        jurisdiction:'Switzerland',                           status:'active', description:'Linked to the EU ETS since 2020 - the only non-EU scheme with a formal link to the European carbon market. Around 50 large industrial and power facilities participate.',                                                  link:'https://www.bafu.admin.ch/bafu/en/home/topics/climate/info-specialists/climate-policy/emissions-trading.html' },
+  { id:'BC-CT',   launchYear:2008, name:'BC Carbon Tax',  fullName:'British Columbia Carbon Tax',                  type:'tax', price:'~95',     currency:'CAD', unit:'per tonne CO2e', launched:'2008', coverage:'~70% of BC emissions',                     sectors:'Transport fuels, heating fuels, industry',         jurisdiction:'British Columbia, Canada',              status:'active', description:'One of the most studied carbon taxes globally. Introduced in 2008 as revenue-neutral. BC\'s system meets the federal benchmark, exempting it from the federal backstop.',                                                link:'https://www2.gov.bc.ca/gov/content/environment/climate-change/planning-and-action/carbon-tax' },
+  { id:'RGGI',    launchYear:2009, name:'RGGI',           fullName:'Regional Greenhouse Gas Initiative',            type:'ets', price:'~14',     currency:'USD', unit:'per tonne CO2e', launched:'2009', coverage:'Power sector only',                         sectors:'Electricity generation (25MW+)',                   jurisdiction:'11 northeastern US states',             status:'active', description:'A cooperative effort among 11 northeastern US states covering the power sector only. The first mandatory market-based carbon programme in the United States.',                                                             link:'https://www.rggi.org' },
+  { id:'CCA',     launchYear:2013, name:'CCA',            fullName:'California Cap-and-Trade Program',              type:'ets', price:'~30',     currency:'USD', unit:'per tonne CO2e', launched:'2013', coverage:'~85% of California emissions',              sectors:'Power, industry, transport fuels, buildings',      jurisdiction:'California (linked to Quebec)',          status:'active', description:'Linked with Quebec since 2014, forming a joint carbon market. One of the broadest-scope ETSs globally, covering transport fuels and building heating.',                                                                    link:'https://ww2.arb.ca.gov/our-work/programs/cap-and-trade-program' },
+  { id:'QC-CaT',  launchYear:2013, name:'Quebec C&T',     fullName:'Quebec Cap-and-Trade System',                  type:'ets', price:'~30',     currency:'CAD', unit:'per tonne CO2e', launched:'2013', coverage:'~80% of Quebec emissions',                 sectors:'Power, industry, transport fuels, buildings',      jurisdiction:'Quebec, Canada',                        status:'active', description:'Linked with California\'s cap-and-trade since 2014, forming a joint market under the Western Climate Initiative. Joint quarterly auctions held across both jurisdictions.',                                              link:'https://www.environnement.gouv.qc.ca/changementsclimatiques/marche-carbone.asp' },
+  { id:'KZ-ETS',  launchYear:2013, name:'Kazakhstan ETS', fullName:'Kazakhstan Emissions Trading System',          type:'ets', price:'~500',    currency:'KZT', unit:'per tonne CO2e', launched:'2013', coverage:'~50% of national emissions',               sectors:'Energy, oil and gas, mining, chemicals, metals',   jurisdiction:'Kazakhstan',                            status:'active', description:'One of the earlier ETSs in the post-Soviet region. Briefly suspended in 2016 before being reformed. Prices remain very low due to oversupply of allowances.',                                                           link:'https://www.gov.kz' },
+  { id:'KR-ETS',  launchYear:2015, name:'Korea ETS',      fullName:'South Korea Emissions Trading Scheme',         type:'ets', price:'~9,800',  currency:'KRW', unit:'per tonne CO2',  launched:'2015', coverage:'~73% of national emissions',               sectors:'Power, industry, buildings, aviation, waste',       jurisdiction:'South Korea',                           status:'active', description:'Asia-Pacific\'s first national ETS and one of the most comprehensive in scope. Around 685 companies participate across power, industry, buildings, aviation, and waste.',                                                  link:'https://ets.krx.co.kr' },
+  { id:'CO-CT',   launchYear:2017, name:'Colombia',       fullName:'Colombia Carbon Tax',                          type:'tax', price:'~25,000', currency:'COP', unit:'per tonne CO2e', launched:'2017', coverage:'~25% of national emissions',               sectors:'Fossil fuel combustion (liquid and gas fuels)',    jurisdiction:'Colombia',                              status:'active', description:'Introduced under Colombia\'s 2016 tax reform. Applies to the carbon content of liquid and gaseous fossil fuels. Coal is currently exempt.',                                                                              link:'https://www.dian.gov.co' },
+  { id:'CL-CT',   launchYear:2017, name:'Chile',          fullName:'Chile Carbon Tax',                             type:'tax', price:'5',       currency:'USD', unit:'per tonne CO2e', launched:'2017', coverage:'Boilers and turbines above 50 MWth',       sectors:'Power generation and large industrial heat sources', jurisdiction:'Chile',                              status:'active', description:'A fixed-rate tax introduced under Chile\'s 2014 tax reform. The USD 5 rate has remained unchanged since launch. Chile is studying a shift to an ETS.',                                                                  link:'https://www.hacienda.cl' },
+  { id:'AR-CT',   launchYear:2018, name:'Argentina',      fullName:'Argentina Carbon Tax',                         type:'tax', price:'~6',      currency:'USD', unit:'per tonne CO2e', launched:'2018', coverage:'~20% of national emissions',               sectors:'Most liquid fuels (excluding natural gas)',        jurisdiction:'Argentina',                             status:'active', description:'Introduced under Argentina\'s December 2017 tax reform (Law 27.430). Applies to most liquid fossil fuels. Natural gas is exempt. Real value eroded by peso devaluation.',                                               link:'https://www.argentina.gob.ar' },
+  { id:'SG-CT',   launchYear:2019, name:'Singapore',      fullName:'Singapore Carbon Tax',                         type:'tax', price:'25',      currency:'SGD', unit:'per tonne CO2e', launched:'2019', coverage:'~80% of national emissions',               sectors:'Facilities emitting 25,000t+ annually',           jurisdiction:'Singapore',                             status:'active', description:'Applies to facilities emitting 25,000 tonnes or more per year. Rate rises to SGD 45 in 2026-2027 and is targeted at SGD 50-80 by 2030.',                                                                                link:'https://www.mse.gov.sg/policies/climate-change/carbon-tax' },
+  { id:'ZA-CT',   launchYear:2019, name:'South Africa',   fullName:'South Africa Carbon Tax',                      type:'tax', price:'~190',    currency:'ZAR', unit:'per tonne CO2e', launched:'2019', coverage:'~80% of national emissions',               sectors:'Energy, industry, transport, agriculture, waste',  jurisdiction:'South Africa',                          status:'active', description:'Broad in scope but substantially offset by free allowances. Phase 2 began in 2026 with a gradual tightening.',                                                                                                          link:'https://www.treasury.gov.za' },
+  { id:'CA-OBPS', launchYear:2019, name:'Canada',         fullName:'Canada Output-Based Pricing System',            type:'ets', price:'~95',     currency:'CAD', unit:'per tonne CO2e', launched:'2019', coverage:'Large industrial emitters',                sectors:'Heavy industry (federal backstop)',                jurisdiction:'Canada (federal backstop)',              status:'active', description:'The federal backstop for Canadian provinces without an equivalent carbon pricing system. The consumer carbon levy was eliminated in early 2025.',                                                                          link:'https://www.canada.ca/en/environment-climate-change/services/climate-change/output-based-pricing-system.html' },
+  { id:'MX-ETS',  launchYear:2020, name:'Mexico ETS',     fullName:'Mexico Emissions Trading System',              type:'ets', price:'~200',    currency:'MXN', unit:'per tonne CO2e', launched:'2020', coverage:'Power and large industry',                  sectors:'Electricity generation, oil and gas, heavy industry', jurisdiction:'Mexico',                              status:'active', description:'Launched as a pilot in 2020, moved to a mandatory transitional phase in 2023. One of the first ETSs in Latin America.',                                                                                               link:'https://www.gob.mx/semarnat' },
+  { id:'CN-ETS',  launchYear:2021, name:'China ETS',      fullName:'China National Emissions Trading Scheme',      type:'ets', price:'~90',     currency:'CNY', unit:'per tonne CO2',  launched:'2021', coverage:'~40% of national emissions',               sectors:'Power, steel, cement, aluminium',                  jurisdiction:'China',                                 status:'active', description:'The world\'s largest ETS by volume of covered emissions. Expanded beyond power in 2025 to include steel, cement, and aluminium.',                                                                                       link:'https://www.mee.gov.cn' },
+  { id:'UK-ETS',  launchYear:2021, name:'UK ETS',         fullName:'UK Emissions Trading Scheme',                  type:'ets', price:'~44',     currency:'GBP', unit:'per tonne CO2e', launched:'2021', coverage:'~25% of UK emissions',                     sectors:'Power, heavy industry, aviation',                  jurisdiction:'United Kingdom',                        status:'active', description:'Launched after the UK left the EU ETS following Brexit. Covers broadly the same sectors. The government has consulted on linking back to the EU ETS.',                                                                  link:'https://www.gov.uk/guidance/uk-emissions-trading-scheme' },
+  { id:'AU-SM',   launchYear:2023, name:'Australia',      fullName:'Australia Safeguard Mechanism',                type:'ets', price:'~33',     currency:'AUD', unit:'per tonne CO2e', launched:'2023', coverage:'~215 large facilities',                    sectors:'Large industrial facilities (100,000t+ threshold)', jurisdiction:'Australia',                            status:'active', description:'Reformed in 2023, sets declining emissions baselines for Australia\'s largest industrial emitters.',                                                                                                                    link:'https://www.cleanenergyregulator.gov.au/Safeguard' },
+  { id:'ID-ETS',  launchYear:2023, name:'Indonesia ETS',  fullName:'Indonesia Emissions Trading System',           type:'ets', price:'~30,000', currency:'IDR', unit:'per tonne CO2e', launched:'2023', coverage:'Coal power plants (over 100 MW)',           sectors:'Electricity generation (coal)',                    jurisdiction:'Indonesia',                             status:'active', description:'Launched in 2023 as the largest ETS in Southeast Asia by covered emissions. Covers coal-fired power plants above 100 MW.',                                                                                              link:'https://www.ebtke.esdm.go.id' },
+  { id:'JP-GX',   launchYear:2023, name:'Japan GX-ETS',   fullName:'Japan GX Emissions Trading System',            type:'ets', price:'~750',    currency:'JPY', unit:'per tonne CO2e', launched:'2023', coverage:'Large industrial emitters (voluntary phase)', sectors:'Power, heavy industry, steel, cement',        jurisdiction:'Japan',                                 status:'active', description:'Part of Japan\'s Green Transformation strategy. Voluntary through 2025, with mandatory compliance from 2026 and a full cap-and-trade system planned from 2033.',                                                          link:'https://gx-league.go.jp' },
+  { id:'WA-CI',   launchYear:2023, name:'Washington CCI', fullName:'Washington Cap-and-Invest Programme',          type:'ets', price:'~55',     currency:'USD', unit:'per tonne CO2e', launched:'2023', coverage:'~75% of WA emissions',                     sectors:'Fossil fuel suppliers, power, industry, transport', jurisdiction:'Washington State, USA',                 status:'active', description:'Launched in 2023 under the Climate Commitment Act. A November 2024 ballot initiative to repeal the programme was defeated 61.7% to 38.3%.',                                                                             link:'https://ecology.wa.gov/Air-Climate/Climate-Commitment-Act/Cap-and-invest' },
+  { id:'TW-ETS',  launchYear:2024, name:'Taiwan ETS',     fullName:'Taiwan Emissions Trading System',              type:'ets', price:'~300',    currency:'TWD', unit:'per tonne CO2e', launched:'2024', coverage:'Large emitters (25,000t+ threshold)',      sectors:'Power, petrochemicals, cement, steel, semiconductors', jurisdiction:'Taiwan',                              status:'active', description:'Established under the 2023 Climate Change Response Act. Targets facilities emitting 25,000 tonnes or more per year.',                                                                                                   link:'https://www.moenv.gov.tw' },
+  { id:'IL-CT',   launchYear:2025, name:'Israel',         fullName:'Israel Carbon Tax',                            type:'tax', price:'~60',     currency:'ILS', unit:'per tonne CO2e', launched:'2025', coverage:'~80% of national emissions',               sectors:'Fossil fuel producers and importers',              jurisdiction:'Israel',                                status:'active', description:'Approved by the Knesset in September 2024 and came into effect on 1 January 2025. Rates rise gradually to 2030.',                                                                                                       link:'https://www.gov.il/en/departments/ministry_of_finance' },
+];
+
+// Key milestones to annotate on the SVG
+const MILESTONES = [
+  { year: 1991, label: "World's first carbon taxes", anchor: 'start' },
+  { year: 2005, label: "First major cap-and-trade (EU)", anchor: 'middle' },
+  { year: 2014, label: "First linked cross-border market", anchor: 'middle' },
+  { year: 2021, label: "World's largest ETS by volume", anchor: 'middle' },
+];
+
+const schemeById = {};
+SCHEMES.forEach(s => schemeById[s.id] = s);
+
+// ---- TIMELINE SVG ----
+
+function buildTimeline() {
+  const svg = document.getElementById('timeline-svg');
+  const W = 960, H = 340;
+  const PAD_L = 50, PAD_R = 40, PAD_TOP = 20, PAD_BOT = 50;
+  const AXIS_Y = H / 2 + 10;
+  const YEAR_MIN = 1990, YEAR_MAX = 2026;
+  const SPAN = YEAR_MAX - YEAR_MIN;
+  const AX_W = W - PAD_L - PAD_R;
+
+  function xOf(year) { return PAD_L + (year - YEAR_MIN) / SPAN * AX_W; }
+
+  const ns = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k,v]) => e.setAttribute(k, v));
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(content, attrs, parent) {
+    const e = el('text', attrs, parent);
+    e.textContent = content;
+    return e;
+  }
+
+  // Background
+  el('rect', { width: W, height: H, fill: '#fafaf8' }, svg);
+
+  // Grid lines at decades
+  [1990, 2000, 2010, 2020].forEach(y => {
+    el('line', { x1: xOf(y), y1: PAD_TOP, x2: xOf(y), y2: H - PAD_BOT + 8, stroke: '#e8e8e5', 'stroke-width': 1 }, svg);
+    txt(String(y), { x: xOf(y), y: H - PAD_BOT + 20, 'font-size': 10, fill: '#999896', 'text-anchor': 'middle', 'font-family': 'system-ui,sans-serif' }, svg);
+  });
+  // 2025 label
+  txt('2025', { x: xOf(2025), y: H - PAD_BOT + 20, 'font-size': 10, fill: '#999896', 'text-anchor': 'middle', 'font-family': 'system-ui,sans-serif' }, svg);
+
+  // Axis line
+  el('line', { x1: PAD_L, y1: AXIS_Y, x2: W - PAD_R, y2: AXIS_Y, stroke: '#d8d6d0', 'stroke-width': 1.5 }, svg);
+
+  // Group schemes by year
+  const byYear = {};
+  SCHEMES.forEach(s => {
+    if(!byYear[s.launchYear]) byYear[s.launchYear] = { ets:[], tax:[] };
+    byYear[s.launchYear][s.type].push(s);
+  });
+
+  const DOT_R = 7;
+  const STACK_GAP = 20;
+
+  Object.entries(byYear).forEach(([yearStr, groups]) => {
+    const year = +yearStr;
+    const cx = xOf(year);
+
+    // ETS above axis
+    groups.ets.forEach((s, i) => {
+      const cy = AXIS_Y - DOT_R - 2 - i * STACK_GAP;
+      el('line', { x1: cx, y1: AXIS_Y, x2: cx, y2: cy + DOT_R, stroke: '#c8d8e8', 'stroke-width': 1 }, svg);
+      const circle = el('circle', { cx, cy, r: DOT_R, fill: '#1a3a5c', cursor: 'pointer', opacity: 0.9 }, svg);
+      circle.addEventListener('click', () => openPanel(s.id));
+      circle.addEventListener('mouseover', function() { this.setAttribute('opacity', '1'); this.setAttribute('r', DOT_R + 1.5); });
+      circle.addEventListener('mouseout', function() { this.setAttribute('opacity', '0.9'); this.setAttribute('r', DOT_R); });
+
+      // Label above - alternate to avoid overlap
+      if(groups.ets.length <= 2 || i === 0) {
+        const labelY = cy - DOT_R - 4 - (i * 2);
+        const labelEl = txt(s.name, { x: cx, y: labelY, 'font-size': 8, fill: '#1a3a5c', 'text-anchor': 'middle', 'font-family': 'system-ui,sans-serif', 'font-weight': '600', cursor: 'pointer' }, svg);
+        labelEl.addEventListener('click', () => openPanel(s.id));
+      }
+    });
+
+    // Tax below axis
+    groups.tax.forEach((s, i) => {
+      const cy = AXIS_Y + DOT_R + 2 + i * STACK_GAP;
+      el('line', { x1: cx, y1: AXIS_Y, x2: cx, y2: cy - DOT_R, stroke: '#e8d8b8', 'stroke-width': 1 }, svg);
+      const circle = el('circle', { cx, cy, r: DOT_R, fill: '#b06a00', cursor: 'pointer', opacity: 0.9 }, svg);
+      circle.addEventListener('click', () => openPanel(s.id));
+      circle.addEventListener('mouseover', function() { this.setAttribute('opacity', '1'); this.setAttribute('r', DOT_R + 1.5); });
+      circle.addEventListener('mouseout', function() { this.setAttribute('opacity', '0.9'); this.setAttribute('r', DOT_R); });
+
+      if(groups.tax.length <= 2 || i === 0) {
+        const labelY = cy + DOT_R + 12 + (i * 2);
+        const labelEl = txt(s.name, { x: cx, y: labelY, 'font-size': 8, fill: '#b06a00', 'text-anchor': 'middle', 'font-family': 'system-ui,sans-serif', 'font-weight': '600', cursor: 'pointer' }, svg);
+        labelEl.addEventListener('click', () => openPanel(s.id));
+      }
+    });
+  });
+
+  // Milestone annotations
+  const milestoneData = [
+    { year: 1991, label: "First carbon taxes", yOffset: -3 },
+    { year: 2005, label: "First major ETS", yOffset: -3 },
+    { year: 2021, label: "China ETS launches - world's largest", yOffset: -3 },
+  ];
+  milestoneData.forEach(m => {
+    const cx = xOf(m.year);
+    el('line', { x1: cx, y1: 18, x2: cx, y2: 28, stroke: '#c0bdb8', 'stroke-width': 1, 'stroke-dasharray': '2,2' }, svg);
+    txt(m.label, { x: cx, y: 14, 'font-size': 8.5, fill: '#7a7874', 'text-anchor': 'middle', 'font-family': 'system-ui,sans-serif', 'font-style': 'italic' }, svg);
+  });
+}
+
+// ---- CHRONOLOGICAL LIST ----
+
+function buildList() {
+  const decades = [
+    { label: '1990s', range: [1990, 1999] },
+    { label: '2000s', range: [2000, 2009] },
+    { label: '2010s', range: [2010, 2019] },
+    { label: '2020s', range: [2020, 2029] },
+  ];
+
+  const wrap = document.getElementById('list-wrap');
+  wrap.innerHTML = decades.map(dec => {
+    const schemes = SCHEMES.filter(s => s.launchYear >= dec.range[0] && s.launchYear <= dec.range[1]);
+    if(!schemes.length) return '';
+    return `
+      <div class="decade-section">
+        <div class="decade-title">${dec.label} - ${schemes.length} scheme${schemes.length !== 1 ? 's' : ''} launched</div>
+        <div class="scheme-grid">
+          ${schemes.map(s => `
+            <div class="scheme-card" onclick="openPanel('${s.id}')">
+              <div class="sc-year">${s.launchYear}</div>
+              <div class="sc-name">${s.fullName}</div>
+              <div class="sc-juris">${s.jurisdiction}</div>
+              <div class="sc-badge"><span class="type-badge type-${s.type}">${s.type === 'ets' ? 'ETS' : 'Carbon tax'}</span></div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ---- PANEL ----
+
+function openPanel(id) {
+  const s = schemeById[id];
+  if(!s) return;
+  const typeLabel = s.type === 'ets' ? 'Emissions Trading System' : 'Carbon Tax';
+  document.getElementById('panel-title').textContent = s.fullName;
+  document.getElementById('panel-sub').textContent = s.jurisdiction;
+  document.getElementById('panel-body').innerHTML = `
+    <span class="panel-badge type-${s.type}">${typeLabel}</span>
+    <div class="panel-stat-grid">
+      <div class="panel-stat"><div class="panel-stat-label">Current price</div><div class="panel-stat-value">${s.currency}\u2009${s.price}</div><div class="panel-stat-unit">${s.unit}</div></div>
+      <div class="panel-stat"><div class="panel-stat-label">Launched</div><div class="panel-stat-value">${s.launched}</div></div>
+    </div>
+    <div class="panel-section"><div class="panel-section-title">Coverage</div><div class="panel-p">${s.coverage}</div></div>
+    <div class="panel-section"><div class="panel-section-title">Sectors covered</div><div class="panel-p">${s.sectors}</div></div>
+    <div class="panel-section"><div class="panel-section-title">About this scheme</div><div class="panel-p">${s.description}</div></div>
+    <div class="panel-section"><a class="panel-link" href="${s.link}" target="_blank" rel="noopener">Official source -></a></div>
+  `;
+  document.getElementById('detail-overlay').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closePanel() {
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closePanel(); });
+
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('hamburger').classList.toggle('open');
+}
+
+buildTimeline();
+buildList();
+</script>
+</body>
+</html>

@@ -60,17 +60,20 @@
   /* CARDS */
   .home-card { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; display: flex; flex-direction: column; min-width: 0; }
   .home-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-  .home-card-1 { border-color: rgba(26,58,92,0.25);  background: rgba(26,58,92,0.025);  height: 340px; overflow: hidden; cursor: default; }
+  .home-card-1 { border-color: rgba(26,58,92,0.25);  background: rgba(26,58,92,0.025);  height: 340px; overflow: hidden; }
   .home-card-2 { border-color: rgba(42,92,138,0.25); background: rgba(42,92,138,0.025); height: 340px; overflow: hidden; }
-  .home-card-3 { border-color: rgba(26,92,138,0.25); background: rgba(26,92,138,0.025); height: 340px; overflow: hidden; cursor: default; }
-  .home-card-4 { border-color: rgba(26,92,92,0.25);  background: rgba(26,92,92,0.025);  height: 340px; overflow: hidden; cursor: default; }
+  .home-card-3 { border-color: rgba(26,90,60,0.25);  background: rgba(26,90,60,0.025);  height: 340px; overflow: hidden; }
+  .home-card-4 { border-color: rgba(90,60,20,0.25);  background: rgba(90,60,20,0.025);  height: 340px; overflow: hidden; }
+  .home-card-5 { border-color: rgba(26,92,92,0.25);  background: rgba(26,92,92,0.025);  height: 340px; overflow: hidden; cursor: default; }
   .home-card-1:hover { border-color: rgba(26,58,92,0.5); }
   .home-card-2:hover { border-color: rgba(42,92,138,0.5); }
-  .home-card-3:hover { border-color: rgba(26,92,138,0.5); }
-  .home-card-4:hover { border-color: rgba(26,92,92,0.5); }
+  .home-card-3:hover { border-color: rgba(26,90,60,0.5); }
+  .home-card-4:hover { border-color: rgba(90,60,20,0.5); }
+  .home-card-5:hover { border-color: rgba(26,92,92,0.5); }
   .card-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; flex-shrink: 0; }
   .card-num-1 { background: #1a3a5c; } .card-num-2 { background: #2a5c8a; }
-  .card-num-3 { background: #1a5c8a; } .card-num-4 { background: #1a5c5c; }
+  .card-num-3 { background: #1a5a3c; } .card-num-4 { background: #5a3c14; }
+  .card-num-5 { background: #1a5c5c; }
 
   .home-card-map { position: relative; overflow: hidden; height: 340px; }
   .home-card-map svg { width: 100%; height: 100%; display: block; }
@@ -95,19 +98,24 @@
   .cal-soon { font-size: 10px; font-weight: 600; color: #9a2a2a; margin-top: 2px; }
   .cal-away { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
 
-  /* SCHEME INDEX CARD */
-  .scheme-list { display: flex; flex-direction: column; }
-  .scheme-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 9px 20px; border-bottom: 1px solid var(--border); align-items: center; cursor: pointer; transition: background 0.1s; }
-  .scheme-row:last-child { border-bottom: none; }
-  .scheme-row:hover { background: rgba(26,92,138,0.04); }
-  .scheme-name { font-size: 12px; font-weight: 700; color: var(--text); }
-  .scheme-jurisdiction { font-size: 10px; color: var(--text-dim); margin-top: 1px; }
-  .scheme-right { text-align: right; }
-  .scheme-price { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: -0.02em; }
-  .scheme-type-badge { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 2px; }
-  .type-ets  { background: var(--ets-bg);  color: var(--ets-text); }
-  .type-tax  { background: var(--tax-bg);  color: var(--tax-text); }
-  .type-both { background: var(--both-bg); color: var(--both-text); }
+  /* PRICES CARD */
+  .plc-list { display: flex; flex-direction: column; padding: 0 20px; }
+  .plc-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .plc-row:last-child { border-bottom: none; }
+  .plc-name { font-size: 12px; font-weight: 700; color: var(--text); }
+  .plc-juris { display: block; font-size: 10px; font-weight: 400; color: var(--text-dim); margin-top: 1px; }
+  .plc-price { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: -0.01em; white-space: nowrap; }
+  .plc-unit { font-size: 10px; font-weight: 400; color: var(--text-dim); }
+
+  /* TIMELINE CARD */
+  .tl-body { padding: 0 20px 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+  .tl-body::before { content: ''; position: absolute; left: 33px; top: 4px; bottom: 18px; width: 1px; background: var(--border); pointer-events: none; }
+  .tl-item { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: center; position: relative; z-index: 1; }
+  .tl-marker { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #fff; flex-shrink: 0; letter-spacing: -0.02em; line-height: 1.2; text-align: center; }
+  .tl-ets { background: var(--blue); }
+  .tl-tax { background: #b06a00; }
+  .tl-scheme { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .tl-milestone { font-size: 10px; color: var(--text-dim); margin-top: 2px; line-height: 1.4; }
 
   /* LOCKED CARD */
   .lock-body { padding: 0 20px 20px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
@@ -117,6 +125,15 @@
   .lock-sub { font-size: 11px; color: var(--text-dim); margin-top: 3px; line-height: 1.55; }
   .lock-tags { display: flex; gap: 6px; flex-wrap: wrap; }
   .lock-tag { font-size: 10px; padding: 3px 10px; border-radius: 20px; background: rgba(26,92,92,0.08); color: var(--teal); font-weight: 600; }
+
+  /* WHO'S WHO PREVIEW CARD */
+  .ww-preview { padding: 0 20px 16px; display: flex; flex-direction: column; gap: 0; }
+  .ww-preview-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .ww-preview-item:last-of-type { border-bottom: none; }
+  .ww-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; letter-spacing: 0.03em; }
+  .ww-pname { font-size: 12px; font-weight: 700; color: var(--text); }
+  .ww-prole { font-size: 10px; color: var(--text-dim); margin-top: 1px; line-height: 1.4; }
+  .ww-preview-more { font-size: 11px; color: var(--teal); font-weight: 600; padding-top: 8px; }
 
   /* DETAIL PANEL */
   .detail-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 200; }
@@ -211,21 +228,21 @@
 <div id="view-home">
   <div class="home-hero">
     <h1 class="hero-h">Carbon pricing, mapped and explained</h1>
-    <p class="hero-sub">10 schemes tracked - compliance calendars, scheme detail, and the people behind the rules</p>
+    <p class="hero-sub">30 schemes tracked - compliance calendars, scheme detail, and the people behind the rules</p>
   </div>
   <div class="home-grid">
 
     <!-- Card 1: Jurisdiction Map -->
-    <div class="home-card home-card-1">
+    <div class="home-card home-card-1" onclick="window.location.href='map.html'"  style="cursor:pointer;">
       <div class="home-card-map">
         <svg id="world-map" viewBox="0 0 700 380" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="home-card-map-overlay">
           <div class="home-card-map-top">
             <div>
               <div class="home-card-map-title"><span class="card-num card-num-1">1</span>Jurisdiction Map</div>
-              <div class="home-card-map-sub">Click a highlighted country to explore the scheme</div>
+              <div class="home-card-map-sub">Click to open the full interactive map</div>
             </div>
-            <div class="home-card-map-cta">Click a country -></div>
+            <div class="home-card-map-cta">Open map -></div>
           </div>
           <div class="home-card-map-bottom">
             <span class="hcl-dot" style="background:var(--map-ets)"></span>ETS
@@ -249,42 +266,79 @@
       <div class="cal-list" id="cal-list"></div>
     </div>
 
-    <!-- Card 3: Scheme Index -->
-    <div class="home-card home-card-3" onclick="window.location.href='schemes.html'" style="cursor:pointer;">
+    <!-- Card 3: Prices -->
+    <div class="home-card home-card-3" onclick="window.location.href='prices.html'" style="cursor:pointer;">
       <div class="home-card-header">
         <div>
-          <div class="home-card-map-title"><span class="card-num card-num-3">3</span>Scheme Index</div>
-          <div class="home-card-map-sub">Price, type, and coverage at a glance</div>
+          <div class="home-card-map-title"><span class="card-num card-num-3">3</span>Prices</div>
+          <div class="home-card-map-sub">Approximate spot indications, updated monthly</div>
         </div>
-        <div class="home-card-map-cta">View all 10 -></div>
+        <div class="home-card-map-cta">View all -></div>
       </div>
-      <div class="scheme-list" id="scheme-list"></div>
+      <div class="plc-list">
+        <div class="plc-row"><div class="plc-name">EU ETS<span class="plc-juris">27 EU members + EEA</span></div><div class="plc-price">EUR ~64 <span class="plc-unit">/ t</span></div></div>
+        <div class="plc-row"><div class="plc-name">UK ETS<span class="plc-juris">United Kingdom</span></div><div class="plc-price">GBP ~44 <span class="plc-unit">/ t</span></div></div>
+        <div class="plc-row"><div class="plc-name">California CCA<span class="plc-juris">California + Quebec</span></div><div class="plc-price">USD ~30 <span class="plc-unit">/ t</span></div></div>
+        <div class="plc-row"><div class="plc-name">China ETS<span class="plc-juris">China</span></div><div class="plc-price">CNY ~90 <span class="plc-unit">/ t</span></div></div>
+      </div>
     </div>
 
-    <!-- Card 4: Who's Who (locked) -->
-    <div class="home-card home-card-4">
+    <!-- Card 4: Timeline -->
+    <div class="home-card home-card-4" onclick="window.location.href='timeline.html'" style="cursor:pointer;">
       <div class="home-card-header">
         <div>
-          <div class="home-card-map-title"><span class="card-num card-num-4">4</span>Who's Who</div>
+          <div class="home-card-map-title"><span class="card-num card-num-4">4</span>Timeline</div>
+          <div class="home-card-map-sub">How the global carbon pricing landscape evolved</div>
+        </div>
+        <div class="home-card-map-cta">View full timeline -></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-item">
+          <div class="tl-marker tl-tax">1991</div>
+          <div><div class="tl-scheme">Sweden &amp; Norway</div><div class="tl-milestone">World's first national carbon taxes</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker tl-ets">2005</div>
+          <div><div class="tl-scheme">EU ETS</div><div class="tl-milestone">First major emissions trading system</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker tl-ets">2014</div>
+          <div><div class="tl-scheme">California + Quebec</div><div class="tl-milestone">First cross-border linked market</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker tl-ets">2021</div>
+          <div><div class="tl-scheme">China ETS</div><div class="tl-milestone">World's largest ETS by covered emissions</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-marker tl-tax">2025</div>
+          <div><div class="tl-scheme">Israel</div><div class="tl-milestone">30 schemes now tracked globally</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5: Who's Who -->
+    <div class="home-card home-card-5" onclick="window.location.href='whoswho.html'" style="cursor:pointer;">
+      <div class="home-card-header">
+        <div>
+          <div class="home-card-map-title"><span class="card-num card-num-5">5</span>Who's Who</div>
           <div class="home-card-map-sub">The people who shape carbon pricing policy</div>
         </div>
-        <div class="home-card-map-cta" style="color:var(--text-dim);">Coming soon</div>
+        <div class="home-card-map-cta">View all -></div>
       </div>
-      <div class="lock-body">
-        <div class="lock-box">
-          <div class="lock-icon">&#128274;</div>
-          <div>
-            <div class="lock-label">In development</div>
-            <div class="lock-sub">Profiles of the regulators, economists, and officials who designed and run the world's carbon pricing schemes - from the EU ETS architects to the ICAP secretariat.</div>
-          </div>
+      <div class="ww-preview">
+        <div class="ww-preview-item">
+          <div class="ww-avatar">WH</div>
+          <div><div class="ww-pname">Wopke Hoekstra</div><div class="ww-prole">Commissioner for Climate, Net Zero and Clean Growth - European Commission</div></div>
         </div>
-        <div class="lock-tags">
-          <span class="lock-tag">Regulators</span>
-          <span class="lock-tag">Scheme architects</span>
-          <span class="lock-tag">Policy advisors</span>
-          <span class="lock-tag">Academic researchers</span>
-          <span class="lock-tag">Market analysts</span>
+        <div class="ww-preview-item">
+          <div class="ww-avatar">CF</div>
+          <div><div class="ww-pname">Christiana Figueres</div><div class="ww-prole">Former Executive Secretary - UNFCCC</div></div>
         </div>
+        <div class="ww-preview-item">
+          <div class="ww-avatar">JD</div>
+          <div><div class="ww-pname">Jos Delbeke</div><div class="ww-prole">Former Director-General, DG CLIMA - European Commission</div></div>
+        </div>
+        <div class="ww-preview-more">+ 5 more profiles</div>
       </div>
     </div>
 
@@ -416,9 +470,20 @@ const SCHEMES = [
     status:'active', launched:'2019', coverage:'~80% of national emissions',
     sectors:'Facilities emitting 25,000t or more annually',
     isos:[702],
-    description:'Applies to facilities emitting 25,000 tonnes or more of greenhouse gases per year. The rate rises to SGD 45 in 2026-2027 and is targeted at SGD 50-80 by 2030. Singapore allows the use of high-quality international carbon credits to meet part of the obligation.',
+    description:'Applies to facilities emitting 25,000 tonnes or more of greenhouse gases per year.',
     link:'https://www.mse.gov.sg/policies/climate-change/carbon-tax'
-  }
+  },
+  { id:'JP-GX',  name:'Japan GX-ETS',    fullName:'Japan GX Emissions Trading System',       type:'ets', price:'~750',     currency:'JPY', unit:'per tonne CO2e', status:'active', launched:'2023', coverage:'Large emitters', sectors:'Power, heavy industry', isos:[392],  jurisdiction:'Japan',        description:'Japan GX League voluntary ETS.', link:'https://gx-league.go.jp' },
+  { id:'CH-ETS', name:'Switzerland ETS', fullName:'Switzerland Emissions Trading System',    type:'ets', price:'~64',      currency:'EUR', unit:'per tonne CO2e', status:'active', launched:'2008', coverage:'~10% of emissions', sectors:'Industry, power', isos:[756],  jurisdiction:'Switzerland',   description:'Linked to EU ETS since 2020.', link:'https://www.bafu.admin.ch' },
+  { id:'CO-CT',  name:'Colombia',        fullName:'Colombia Carbon Tax',                     type:'tax', price:'~25,000',  currency:'COP', unit:'per tonne CO2e', status:'active', launched:'2017', coverage:'~25% of emissions', sectors:'Fossil fuels', isos:[170],  jurisdiction:'Colombia',      description:'Colombia carbon tax on fossil fuels.', link:'https://www.dian.gov.co' },
+  { id:'CL-CT',  name:'Chile',           fullName:'Chile Carbon Tax',                        type:'tax', price:'5',        currency:'USD', unit:'per tonne CO2e', status:'active', launched:'2017', coverage:'Boilers >50 MWth', sectors:'Power, industry', isos:[152],  jurisdiction:'Chile',         description:'Fixed-rate carbon tax.', link:'https://www.hacienda.cl' },
+  { id:'ZA-CT',  name:'South Africa',    fullName:'South Africa Carbon Tax',                 type:'tax', price:'~190',     currency:'ZAR', unit:'per tonne CO2e', status:'active', launched:'2019', coverage:'~80% of emissions', sectors:'Energy, industry', isos:[710],  jurisdiction:'South Africa',  description:'South Africa carbon tax.', link:'https://www.treasury.gov.za' },
+  { id:'MX-ETS', name:'Mexico ETS',      fullName:'Mexico Emissions Trading System',         type:'ets', price:'~200',     currency:'MXN', unit:'per tonne CO2e', status:'active', launched:'2020', coverage:'Power, industry', sectors:'Power, industry', isos:[484],  jurisdiction:'Mexico',        description:'Mexico pilot ETS.', link:'https://www.gob.mx/semarnat' },
+  { id:'KZ-ETS', name:'Kazakhstan ETS',  fullName:'Kazakhstan Emissions Trading System',     type:'ets', price:'~500',     currency:'KZT', unit:'per tonne CO2e', status:'active', launched:'2013', coverage:'~50% of emissions', sectors:'Energy, industry', isos:[398],  jurisdiction:'Kazakhstan',    description:'Kazakhstan ETS.', link:'https://www.gov.kz' },
+  { id:'ID-ETS', name:'Indonesia ETS',   fullName:'Indonesia Emissions Trading System',      type:'ets', price:'~30,000',  currency:'IDR', unit:'per tonne CO2e', status:'active', launched:'2023', coverage:'Coal power plants', sectors:'Power', isos:[360],  jurisdiction:'Indonesia',     description:'Indonesia power sector ETS.', link:'https://www.ebtke.esdm.go.id' },
+  { id:'TW-ETS', name:'Taiwan ETS',      fullName:'Taiwan Emissions Trading System',         type:'ets', price:'~300',     currency:'TWD', unit:'per tonne CO2e', status:'active', launched:'2024', coverage:'Large emitters', sectors:'Power, industry', isos:[158],  jurisdiction:'Taiwan',        description:'Taiwan ETS launched 2024.', link:'https://www.moenv.gov.tw' },
+  { id:'IL-CT',  name:'Israel',          fullName:'Israel Carbon Tax',                       type:'tax', price:'~60',      currency:'ILS', unit:'per tonne CO2e', status:'active', launched:'2025', coverage:'~80% of emissions', sectors:'Fossil fuels', isos:[376],  jurisdiction:'Israel',        description:'Israel carbon tax from Jan 2025.', link:'https://www.gov.il/en/departments/ministry_of_finance' },
+  { id:'AR-CT',  name:'Argentina',       fullName:'Argentina Carbon Tax',                    type:'tax', price:'~6',       currency:'USD', unit:'per tonne CO2e', status:'active', launched:'2018', coverage:'~20% of emissions', sectors:'Liquid fuels', isos:[32],   jurisdiction:'Argentina',     description:'Argentina carbon tax on liquid fuels.', link:'https://www.argentina.gob.ar' },
 ];
 
 // US partial (CCA + RGGI are sub-national)
@@ -572,23 +637,6 @@ function renderCalendar() {
 
 // ---- SCHEME INDEX ----
 
-function renderSchemes() {
-  const el = document.getElementById('scheme-list');
-  el.innerHTML = SCHEMES.slice(0,3).map(s => {
-    const typeLabel = s.type === 'ets' ? 'ETS' : 'Carbon tax';
-    return `<div class="scheme-row" onclick="openSchemePanel('${s.id}');event.stopPropagation();">
-      <div>
-        <div class="scheme-name">${s.name}</div>
-        <div class="scheme-jurisdiction">${s.jurisdiction}</div>
-      </div>
-      <div class="scheme-right">
-        <div class="scheme-price">${s.currency}&thinsp;${s.price}</div>
-        <div><span class="scheme-type-badge type-${s.type}">${typeLabel}</span></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
 // ---- WORLD MAP ----
 
 function mapFill(iso) {
@@ -622,10 +670,6 @@ async function renderWorldMap() {
       })
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.4)
-      .attr('cursor', d => {
-        const iso = +d.id;
-        return (isoToSchemes[iso] || PARTIAL_ISOS.has(iso)) ? 'pointer' : 'default';
-      })
       .on('mouseover', function(event, d) {
         const iso = +d.id;
         const name = d.properties ? d.properties.name : '';
@@ -643,12 +687,6 @@ async function renderWorldMap() {
       .on('mouseout', function() {
         d3.select(this).attr('opacity', 1);
         hideTooltip();
-      })
-      .on('click', function(event, d) {
-        event.stopPropagation();
-        const iso = +d.id;
-        if(!isoToSchemes[iso] && !PARTIAL_ISOS.has(iso)) return;
-        openCountryPanel(iso);
       });
 
   } catch(e) { console.error('Map load failed:', e); }
@@ -685,7 +723,6 @@ document.addEventListener('click', e => {
 // ---- INIT ----
 
 renderCalendar();
-renderSchemes();
 renderWorldMap();
 
 </script>
