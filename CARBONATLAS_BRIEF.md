@@ -62,7 +62,7 @@ cd /Users/lisaswerling/RALPH/AI/carbonatlas && git add -A && git commit -m '...'
 | `schemes.html` | Full scheme index - all 30 schemes, filterable by type, detail panel |
 | `prices.html` | Price listing - all 27 active schemes grouped by ETS/tax, detail panel |
 | `timeline.html` | Interactive SVG timeline + chronological card grid grouped by decade |
-| `whoswho.html` | Who's Who - 7 verified profiles of current and recent carbon pricing practitioners |
+| `whoswho.html` | Who's Who - 8 verified profiles of current and recent carbon pricing practitioners |
 
 No build script. No JSON data files - all data is baked into each HTML file as JS objects.
 
@@ -154,9 +154,9 @@ US (840) treated as partial/sub-national - coloured separately on map.
 
 ---
 
-## Who's Who - 7 verified profiles
+## Who's Who - 8 verified profiles
 
-Curation model: editorial selection of verified, documented contributors to major schemes. Start editorially, expand carefully. Outreach approach: notify people they've been included - do not ask permission first. Do slowly and carefully.
+Curation model: editorial selection of verified, documented contributors to major schemes. The section should feature real practitioners across the carbon pricing ecosystem - not just political heavyweights. The goal is stickiness: people in the industry see themselves or their peers featured, share the page, and come back. Start editorially, expand carefully. Outreach approach: notify people they've been included - do not ask permission first. Do slowly and carefully.
 
 Revenue potential: premium placement, verified badges, event partnerships, direct outreach to firms wanting to reach this audience.
 
@@ -171,6 +171,39 @@ Revenue potential: premium placement, verified badges, event partnerships, direc
 | Mary Nichols | Former CARB Chair (2007-2020) | CCA |
 | Lauren Sanchez | Chair - California Air Resources Board | CCA |
 | Dirk Forrister | President and CEO - IETA | Global |
+| Dame Patsy Reddy | Chair - He Pou a Rangi Climate Change Commission | NZ ETS |
+
+### Expansion categories (decided April 2026)
+
+The next wave of profiles should cover the practitioner ecosystem across these eight categories:
+
+1. **Registry and standards heads** - Verra, Gold Standard, ICVCM
+2. **Carbon advisory firms** - South Pole, Carbon Trust, Climate Focus
+3. **Corporate compliance leads** - sustainability/carbon directors at major emitters (utilities, steel, airlines, cement)
+4. **Specialist brokers and traders** - dedicated carbon desks at firms like Vertis, STX, Evolution Markets
+5. **Market data and intelligence** - Carbon Pulse, Ecosystem Marketplace, ICAP
+6. **Project developers** - people building offset and removal projects
+7. **Verification and MRV** - auditors who verify emissions reports
+8. **Academics** - economists whose work underpins carbon pricing theory
+
+### Verified candidates (researched, not yet added)
+
+| Name | Role | Category | Source |
+|---|---|---|---|
+| Mandy Rambharos | CEO - Verra (since Aug 2024). Former UN climate negotiator (Article 6), 20 years at Eskom | Registry/standards | verra.org |
+| Margaret Kim | CEO - Gold Standard (since 2019). Former GGGI. Based in Geneva | Registry/standards | goldstandard.org |
+| Annette Nazareth | Chair - ICVCM Governing Board (since 2021). Former SEC Commissioner | Registry/standards | icvcm.org |
+| William Nordhaus | Sterling Professor, Yale. Nobel Prize 2018 for DICE model | Academic | nobelprize.org |
+| Nicholas Stern | Chair, Grantham Research Institute, LSE. Stern Review 2006 | Academic | lse.ac.uk |
+
+### Still to research
+
+- Carbon advisory firms (South Pole had leadership upheaval 2023 - check current CEO; Carbon Trust; Climate Focus)
+- Corporate compliance leads (need named individuals at major emitters)
+- Specialist brokers (Vertis, STX, Evolution Markets)
+- Market data (Carbon Pulse founders, ICAP head)
+- Project developers
+- Verification/MRV
 
 **Design notes:** Cards use initials avatar (dark navy circle), name, role, organisation, scheme badge, 2-sentence bio, link to official source. No detail panel - the card is the profile. Editorial note on page explains curation criteria.
 
@@ -197,7 +230,7 @@ Row 1: Map (card 1) | Calendar (card 2)
 Row 2: Prices (card 3) | Timeline (card 4)
 Row 3: Who's Who (card 5) | [empty slot for future card]
 
-Card 5 shows 3 name previews (Hoekstra, Figueres, Delbeke) + "+ 4 more profiles" - no longer locked.
+Card 5 shows 3 name previews (Hoekstra, Figueres, Delbeke) + "+ 5 more profiles" - no longer locked.
 
 ---
 
@@ -216,12 +249,12 @@ Total maintenance: approximately 30-45 minutes per month once stable.
 ## On the horizon
 
 - Custom domain (name decision still deferred)
-- Who's Who expansion - research and verify more profiles before adding. Priority: UK ETS official, NZ ETS, Korea ETS, one from World Bank carbon pricing team
+- Who's Who expansion - add the five verified candidates (Rambharos, Kim, Nazareth, Nordhaus, Stern), then continue researching the remaining categories (advisory, corporate, brokers, data, developers, MRV)
 - Who's Who outreach strategy - notify people they're included. Very slowly, one at a time, only once the section looks authoritative
+- Compact dropdown menu - tested on calendar.html (right-aligned, 200px, border-radius 10px). Needs review on localhost, then roll to all 7 files
 - Revenue paths: premium placement, verified badges, event partnerships, direct outreach
 - Price history charts in scheme detail panels
 - Map improvements - click-to-zoom
 - Data files (JSON) - currently baked into HTML; extract when update cadence makes it worth it
-- Historical "Thinkers" section (Nordhaus, Sandor, Delbeke, etc.) - pocketed as future editorial feature
+- Historical "Thinkers" section (Nordhaus, Sandor, Delbeke, etc.) - pocketed as future editorial feature; may overlap with academics in Who's Who
 - Sectors page - deferred; may be a rich card rather than a full page
-- Calendar.html nav not yet updated to include Prices/Timeline/Who's Who (file not edited this session)

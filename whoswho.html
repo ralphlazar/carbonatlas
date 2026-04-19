@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Who's Who - Carbon Atlas</title>
-<meta name="description" content="The officials and economists who design and run the world's major carbon pricing schemes.">
+<meta name="description" content="The officials, registry leaders, and economists who design and run the world's major carbon pricing schemes.">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -16,6 +16,8 @@
     --ets-bg: #e0eaf5; --ets-text: #1a3a5c;
     --tax-bg: #faeeda; --tax-text: #633806;
     --global-bg: #e8e8e2; --global-text: #5a5854;
+    --vol-bg: #e6ebe0; --vol-text: #3d4a2a;
+    --acad-bg: #e0eced; --acad-text: #1a4a5c;
   }
   html { scroll-behavior: smooth; overflow-x: hidden; }
   body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; }
@@ -58,8 +60,10 @@
   .profile-bio { font-size: 13px; color: var(--text-muted); line-height: 1.75; margin-top: 16px; flex: 1; }
   .profile-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
   .scheme-badge { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 4px; display: inline-block; }
-  .badge-ets    { background: var(--ets-bg);    color: var(--ets-text); }
-  .badge-global { background: var(--global-bg); color: var(--global-text); }
+  .badge-ets       { background: var(--ets-bg);    color: var(--ets-text); }
+  .badge-global    { background: var(--global-bg); color: var(--global-text); }
+  .badge-voluntary { background: var(--vol-bg);    color: var(--vol-text); }
+  .badge-academic  { background: var(--acad-bg);   color: var(--acad-text); }
   .profile-link { font-size: 11px; color: var(--text-dim); transition: color 0.15s; display: flex; align-items: center; gap: 4px; }
   .profile-link:hover { color: var(--blue); }
 
@@ -124,7 +128,7 @@
 <div class="page-header">
   <a class="page-back" href="index.html">← Home</a>
   <div class="page-title">Who's Who</div>
-  <div class="page-sub">The officials and economists who design and run the world's major carbon pricing schemes</div>
+  <div class="page-sub">The officials, registry leaders, and economists who design and run the world's major carbon pricing schemes</div>
 </div>
 
 <div class="profiles-wrap">
@@ -132,7 +136,7 @@
 </div>
 
 <div class="editorial-note">
-  <div class="note-box">Carbon Atlas profiles the senior officials, regulators, and advocates who shape carbon pricing policy globally. Profiles are selected editorially on the basis of verified, documented contributions to major schemes. This section is updated as the field evolves.</div>
+  <div class="note-box">Carbon Atlas profiles the senior officials, regulators, registry leaders, and academics who shape carbon pricing policy globally. Profiles are selected editorially on the basis of verified, documented contributions to major schemes. This section is updated as the field evolves.</div>
 </div>
 
 <footer>
@@ -228,6 +232,61 @@ const PROFILES = [
     bio: 'Former Governor-General of New Zealand (2016-2021), appointed in February 2025 to chair the independent commission that advises the government on NZ ETS unit limits, price settings, and emissions budgets. Took over from founding chair Rod Carr as the scheme navigates surplus reduction and fragile market confidence heading into its second decade.',
     link: 'https://www.climatecommission.govt.nz/news/new-chair-and-commissioners-announced',
     linkLabel: 'Climate Change Commission'
+  },
+  {
+    initials: 'MR',
+    name: 'Mandy Rambharos',
+    role: 'CEO',
+    org: 'Verra',
+    scheme: 'Voluntary',
+    badgeClass: 'badge-voluntary',
+    bio: 'Took the helm at the world\'s largest voluntary carbon registry in August 2024, after two decades at South African utility Eskom and a leading role for the African negotiating bloc in UN climate talks on Article 6. Inherited a registry under intense scrutiny over REDD+ methodologies and tasked with rebuilding market confidence in voluntary credits.',
+    link: 'https://verra.org/about/leadership/',
+    linkLabel: 'Verra'
+  },
+  {
+    initials: 'MK',
+    name: 'Margaret Kim',
+    role: 'CEO',
+    org: 'Gold Standard',
+    scheme: 'Voluntary',
+    badgeClass: 'badge-voluntary',
+    bio: 'Has led Gold Standard since 2019, the registry most associated with development co-benefits and community-led projects, second only to Verra in voluntary credit issuance. Came from the Global Green Growth Institute and now sits at the centre of debates over methodology integrity, removals, and the future shape of voluntary carbon markets.',
+    link: 'https://www.goldstandard.org/about-us/team',
+    linkLabel: 'Gold Standard'
+  },
+  {
+    initials: 'AN',
+    name: 'Annette Nazareth',
+    role: 'Chair, Governing Board',
+    org: 'Integrity Council for the Voluntary Carbon Market',
+    scheme: 'Voluntary',
+    badgeClass: 'badge-voluntary',
+    bio: 'Chairs the body that issues the Core Carbon Principles, the integrity benchmark used by registries, buyers, and standard-setters to assess the quality of voluntary carbon credits. A former SEC Commissioner, she brings a regulatory and disclosure background to a market that has long lacked common quality standards.',
+    link: 'https://icvcm.org/governance/',
+    linkLabel: 'ICVCM'
+  },
+  {
+    initials: 'WN',
+    name: 'William Nordhaus',
+    role: 'Sterling Professor of Economics',
+    org: 'Yale University',
+    scheme: 'Academic',
+    badgeClass: 'badge-academic',
+    bio: 'Awarded the 2018 Nobel Prize in Economics for integrating climate change into long-run macroeconomic analysis through the DICE model, which provided the analytical foundation for carbon pricing as the most efficient policy response to emissions. A longstanding advocate of a global carbon price, his work continues to shape how economists frame climate policy choices.',
+    link: 'https://www.nobelprize.org/prizes/economic-sciences/2018/nordhaus/facts/',
+    linkLabel: 'Nobel Prize'
+  },
+  {
+    initials: 'NS',
+    name: 'Nicholas Stern',
+    role: 'IG Patel Professor of Economics; Chair, Grantham Research Institute',
+    org: 'London School of Economics',
+    scheme: 'Academic',
+    badgeClass: 'badge-academic',
+    bio: 'Authored the 2006 Stern Review on the Economics of Climate Change, the first major government-commissioned analysis to argue that the costs of inaction on climate vastly exceeded the costs of mitigation. Chairs the Grantham Research Institute on Climate Change and the Environment at LSE and remains one of the most influential voices on climate finance and carbon pricing globally.',
+    link: 'https://www.lse.ac.uk/granthaminstitute/profile/nicholas-stern/',
+    linkLabel: 'LSE Grantham'
   }
 ];
 
